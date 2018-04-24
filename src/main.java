@@ -7,12 +7,13 @@ import java.sql.Statement;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import ui.login;
 import ui.contacts;
 
 public class main {
 
     public static void main(String[] args){
-        new contacts();
-        contacts.main();
+        new login();
+        login.main();
     }
 }

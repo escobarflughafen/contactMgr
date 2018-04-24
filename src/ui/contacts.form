@@ -4,7 +4,10 @@
     <constraints>
       <xy x="20" y="20" width="681" height="591"/>
     </constraints>
-    <properties/>
+    <properties>
+      <minimumSize width="512" height="384"/>
+      <preferredSize width="800" height="480"/>
+    </properties>
     <clientProperties>
       <html.disable class="java.lang.Boolean" value="false"/>
     </clientProperties>
@@ -64,14 +67,9 @@
                       </component>
                     </children>
                   </grid>
-                  <component id="ff12e" class="javax.swing.JTable" binding="catalogue">
+                  <component id="bbe6f" class="javax.swing.JTable" binding="catalogue">
                     <constraints border-constraint="Center"/>
-                    <properties>
-                      <autoResizeMode value="2"/>
-                    </properties>
-                    <clientProperties>
-                      <JTable.autoStartsEdit class="java.lang.Boolean" value="false"/>
-                    </clientProperties>
+                    <properties/>
                   </component>
                 </children>
               </grid>
@@ -82,9 +80,9 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="ba95c" binding="toCreatePanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+                  <grid id="ba95c" binding="toModifyPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
                     <constraints>
-                      <tabbedpane title="新建"/>
+                      <tabbedpane title="修改"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
@@ -98,6 +96,7 @@
                             <constraints/>
                             <properties>
                               <background color="-1250068"/>
+                              <defaultCapable value="true"/>
                               <enabled value="true"/>
                               <horizontalAlignment value="0"/>
                               <horizontalTextPosition value="2"/>
@@ -105,11 +104,17 @@
                               <verticalTextPosition value="0"/>
                             </properties>
                           </component>
-                          <component id="f783a" class="javax.swing.JButton" binding="chkBtn">
+                          <component id="f783a" class="javax.swing.JButton" binding="createNewBtn">
                             <constraints/>
                             <properties>
-                              <text value="检查"/>
+                              <actionCommand value=""/>
+                              <hideActionText value="false"/>
+                              <label value="新建"/>
+                              <text value="新建"/>
                             </properties>
+                            <clientProperties>
+                              <html.disable class="java.lang.Boolean" value="false"/>
+                            </clientProperties>
                           </component>
                         </children>
                       </grid>
@@ -143,14 +148,16 @@
                                   <text value="姓名"/>
                                 </properties>
                               </component>
-                              <component id="48bf4" class="javax.swing.JTextField" binding="textField1" default-binding="true">
+                              <component id="48bf4" class="javax.swing.JTextField" binding="nameTextField">
                                 <constraints>
                                   <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                     <preferred-size width="150" height="-1"/>
                                   </grid>
                                   <gridbag weightx="1.0" weighty="1.0"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <text value=""/>
+                                </properties>
                               </component>
                               <component id="43863" class="javax.swing.JLabel" binding="direLbl">
                                 <constraints>
@@ -188,7 +195,7 @@
                                   <text value="电话"/>
                                 </properties>
                               </component>
-                              <component id="bff61" class="javax.swing.JTextField" binding="textField5" default-binding="true">
+                              <component id="bff61" class="javax.swing.JTextField" binding="teleNumTextField">
                                 <constraints>
                                   <grid row="5" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                     <preferred-size width="150" height="-1"/>
@@ -206,7 +213,7 @@
                                   <text value="电邮"/>
                                 </properties>
                               </component>
-                              <component id="ca65a" class="javax.swing.JTextField" binding="textField6" default-binding="true">
+                              <component id="ca65a" class="javax.swing.JTextField" binding="emailTextField">
                                 <constraints>
                                   <grid row="6" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                     <preferred-size width="150" height="-1"/>
@@ -215,7 +222,7 @@
                                 </constraints>
                                 <properties/>
                               </component>
-                              <component id="70d68" class="javax.swing.JTextField" binding="textField7" default-binding="true">
+                              <component id="70d68" class="javax.swing.JTextField" binding="idTextField">
                                 <constraints>
                                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                     <preferred-size width="150" height="-1"/>
@@ -242,39 +249,29 @@
                                   <text value="住址"/>
                                 </properties>
                               </component>
-                              <component id="bfa2d" class="javax.swing.JTextField" binding="textField8" default-binding="true">
+                              <component id="bfa2d" class="javax.swing.JTextField" binding="dormTextField">
                                 <constraints>
                                   <grid row="7" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                     <preferred-size width="150" height="-1"/>
                                   </grid>
                                   <gridbag weightx="1.0" weighty="1.0"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <text value=""/>
+                                </properties>
                               </component>
-                              <component id="6236c" class="javax.swing.JTextField" binding="textField9" default-binding="true">
+                              <component id="6236c" class="javax.swing.JTextField" binding="addrTextField">
                                 <constraints>
                                   <grid row="8" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
                                     <preferred-size width="150" height="-1"/>
                                   </grid>
                                   <gridbag weightx="1.0" weighty="1.0"/>
                                 </constraints>
-                                <properties/>
+                                <properties>
+                                  <text value=""/>
+                                </properties>
                               </component>
-                              <component id="c03f" class="javax.swing.JSpinner" binding="gradeSpin">
-                                <constraints>
-                                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                                  <gridbag weightx="1.0" weighty="1.0"/>
-                                </constraints>
-                                <properties/>
-                              </component>
-                              <component id="b4d96" class="javax.swing.JSpinner" binding="clsSpin">
-                                <constraints>
-                                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
-                                  <gridbag weightx="1.0" weighty="1.0"/>
-                                </constraints>
-                                <properties/>
-                              </component>
-                              <component id="f9738" class="javax.swing.JComboBox" binding="comboBox1" default-binding="true">
+                              <component id="f9738" class="javax.swing.JComboBox" binding="groupBox">
                                 <constraints>
                                   <grid row="2" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
                                   <gridbag weightx="1.0" weighty="1.0"/>
@@ -287,6 +284,46 @@
                                     <item value="后端"/>
                                     <item value="手游"/>
                                     <item value="设计"/>
+                                  </model>
+                                </properties>
+                              </component>
+                              <component id="6519f" class="javax.swing.JComboBox" binding="gradeBox">
+                                <constraints>
+                                  <grid row="3" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                                  <gridbag weightx="0.0" weighty="0.0"/>
+                                </constraints>
+                                <properties>
+                                  <model>
+                                    <item value="大一"/>
+                                    <item value="大二"/>
+                                    <item value="大三"/>
+                                    <item value="大四"/>
+                                  </model>
+                                </properties>
+                              </component>
+                              <component id="50477" class="javax.swing.JComboBox" binding="clasBox">
+                                <constraints>
+                                  <grid row="4" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="2" anchor="8" fill="1" indent="0" use-parent-layout="false"/>
+                                  <gridbag weightx="0.0" weighty="0.0"/>
+                                </constraints>
+                                <properties>
+                                  <model>
+                                    <item value="1"/>
+                                    <item value="2"/>
+                                    <item value="3"/>
+                                    <item value="4"/>
+                                    <item value="5"/>
+                                    <item value="6"/>
+                                    <item value="7"/>
+                                    <item value="8"/>
+                                    <item value="9"/>
+                                    <item value="10"/>
+                                    <item value="11"/>
+                                    <item value="12"/>
+                                    <item value="13"/>
+                                    <item value="14"/>
+                                    <item value="15"/>
+                                    <item value="16"/>
                                   </model>
                                 </properties>
                               </component>

@@ -21,7 +21,7 @@ public class admin {
         this.username = username;
     }
 
-    public void Admin(String username,String password){
+    public admin(String username,String password){
         setUsername(username);
         setPassword(password);
     }

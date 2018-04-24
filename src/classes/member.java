@@ -3,9 +3,9 @@ package classes;
 import sun.jvm.hotspot.debugger.Address;
 
 public class member{
-    private int id;
+    private String id;
     private String name;
-    private String group;
+    private int group;
     private int grade;
     private int clas;
     private String phoneNum;
@@ -13,12 +13,20 @@ public class member{
     private String dormitory;
     private String address;
 
-    public member(int id,String name,String group,int clas,String phoneNum,String email,String dormitory,String address){
-
+    public member(String id,String name,int group,int grade,int clas,String phoneNum,String email,String dormitory,String address){
+        setId(id);
+        setName(name);
+        setAddress(address);
+        setClas(clas);
+        setDormitory(dormitory);
+        setEmail(email);
+        setGroup(group);
+        setPhoneNum(phoneNum);
+        setGrade(grade);
     }
 
 
-    public void setId(int id){
+    public void setId(String id){
         this.id = id;
     }
 
@@ -26,7 +34,7 @@ public class member{
         this.name = name;
     }
 
-    public void setGroup(String group){
+    public void setGroup(int group){
         this.group = group;
     }
 
@@ -54,7 +62,7 @@ public class member{
         this.address = address;
     }
 
-    public int getId(){
+    public String getId(){
         return id;
     }
 
@@ -62,7 +70,7 @@ public class member{
         return name;
     }
 
-    public String getGroup() {
+    public int getGroup() {
         return group;
     }
 
