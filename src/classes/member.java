@@ -1,8 +1,10 @@
 package classes;
 
+import javafx.beans.binding.ObjectExpression;
 import sun.jvm.hotspot.debugger.Address;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.Vector;
 
 public class member{
     private String id;
@@ -98,6 +100,11 @@ public class member{
 
     public String getAddress(){
         return address;
+    }
+
+    public String[] getRecord(){
+        String[] record = {id,name,group,grade,clas,phoneNum,email,dormitory,address};
+        return record;
     }
 
     public void makeTableItem(DefaultTableModel model){

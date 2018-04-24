@@ -3,8 +3,10 @@ package ui;
 import classes.member;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.*;
 
@@ -12,7 +14,7 @@ import java.awt.event.*;
 public class contacts {
 
     private JPanel panel1;
-    private JTextField textFieldSearch;
+    private JTextField searchTextField;
     private JButton btnGo;
     private JPanel SearchPanel;
     private JTabbedPane tabbedPane1;
@@ -50,16 +52,33 @@ public class contacts {
     private JTable catalogue;
     private JComboBox gradeBox;
     private JComboBox clasBox;
+    private JScrollPane contentsScrollPane;
+    private JButton searchByCondBtn;
+    private JButton savBtn;
 
 
-    String items[] = {"ＩＤ", "Name", "Group", "Grade", "Class", "Phone", "Email", "Dormitory", "Address"};
-    DefaultTableModel infoModel = new DefaultTableModel(items, 0);
+    //status variables;
+    private int selectedRowIdx = 0; //selected row index in catalogue
+    private boolean isSaved = true;    //records whether the data is modified after saving or not
+    private int rowCount = 0;
+
+
+    String colHeaders[] = {"ＩＤ", "Name", "Group", "Grade", "Class", "Phone", "Email", "Dormitory", "Address"};
+
+    DefaultTableModel infoModel = new DefaultTableModel(colHeaders, 0);
 
 
     public contacts() {
-
         catalogue.setModel(infoModel);
 
+        //Table row selection Listener;
+
+        catalogue.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
+            }
+        });
 
         saveBtn.addMouseListener(new MouseAdapter() {
             @Override
@@ -72,11 +91,35 @@ public class contacts {
                         teleNumTextField.getText(), emailTextField.getText(),
                         dormTextField.getText(), addrTextField.getText());
 
-                memInfo.makeTableItem(infoModel);
+                int tempRowIndex = selectedRowIdx;
+                infoModel.removeRow(selectedRowIdx);
+                infoModel.insertRow(tempRowIndex, memInfo.getRecord());
+
+
+                isSaved = false;
 
             }
         });
 
+        deleteBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                infoModel.removeRow(selectedRowIdx);
+
+            }
+        });
+
+        createNewBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String[] emptyRow = {""};
+                infoModel.insertRow((selectedRowIdx == 0 && rowCount == 0) ? selectedRowIdx : selectedRowIdx + 1, emptyRow);
+                rowCount++;
+                isSaved = false;
+            }
+        });
     }
 
     private void createUIComponents() {
@@ -129,8 +172,8 @@ public class contacts {
         SearchPanel = new JPanel();
         SearchPanel.setLayout(new GridBagLayout());
         contactTable.add(SearchPanel, BorderLayout.NORTH);
-        textFieldSearch = new JTextField();
-        textFieldSearch.setText("查询");
+        searchTextField = new JTextField();
+        searchTextField.setText("查询");
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -139,7 +182,7 @@ public class contacts {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        SearchPanel.add(textFieldSearch, gbc);
+        SearchPanel.add(searchTextField, gbc);
         btnGo = new JButton();
         btnGo.setText("Go");
         gbc = new GridBagConstraints();
@@ -148,10 +191,13 @@ public class contacts {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         SearchPanel.add(btnGo, gbc);
+        contentsScrollPane = new JScrollPane();
+        contactTable.add(contentsScrollPane, BorderLayout.CENTER);
         catalogue = new JTable();
         catalogue.setGridColor(new Color(-16777216));
         catalogue.setShowHorizontalLines(true);
-        contactTable.add(catalogue, BorderLayout.CENTER);
+        catalogue.setVisible(true);
+        contentsScrollPane.setViewportView(catalogue);
         tabbedPane1 = new JTabbedPane();
         mainSplit.setRightComponent(tabbedPane1);
         toModifyPanel = new JPanel();
@@ -374,12 +420,18 @@ public class contacts {
         deleteBtn = new JButton();
         deleteBtn.setText("删除选中");
         ctrlPanel.add(deleteBtn);
+        searchByCondBtn = new JButton();
+        searchByCondBtn.setText("条件查询");
+        ctrlPanel.add(searchByCondBtn);
         statBtn = new JButton();
         statBtn.setText("统计信息");
         ctrlPanel.add(statBtn);
         ex2csvBtn = new JButton();
         ex2csvBtn.setText("输出 CSV");
         ctrlPanel.add(ex2csvBtn);
+        savBtn = new JButton();
+        savBtn.setText("保存通讯录");
+        ctrlPanel.add(savBtn);
     }
 
     /**
