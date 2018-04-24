@@ -1,19 +1,21 @@
 package classes;
 
 import sun.jvm.hotspot.debugger.Address;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 
 public class member{
     private String id;
     private String name;
-    private int group;
-    private int grade;
-    private int clas;
+    private String group;
+    private String grade;
+    private String clas;
     private String phoneNum;
     private String email;
     private String dormitory;
     private String address;
 
-    public member(String id,String name,int group,int grade,int clas,String phoneNum,String email,String dormitory,String address){
+    public member(String id,String name,String group,String grade,String clas,String phoneNum,String email,String dormitory,String address){
         setId(id);
         setName(name);
         setAddress(address);
@@ -34,15 +36,15 @@ public class member{
         this.name = name;
     }
 
-    public void setGroup(int group){
+    public void setGroup(String group){
         this.group = group;
     }
 
-    public void setGrade(int grade){
+    public void setGrade(String grade){
         this.grade = grade;
     }
 
-    public void setClas (int clas){
+    public void setClas (String clas){
         this.clas = clas;
     }
 
@@ -70,15 +72,15 @@ public class member{
         return name;
     }
 
-    public int getGroup() {
+    public String getGroup() {
         return group;
     }
 
-    public int getGrade(){
+    public String getGrade(){
         return grade;
     }
 
-    public int getClas(){
+    public String getClas(){
         return clas;
     }
 
@@ -96,5 +98,12 @@ public class member{
 
     public String getAddress(){
         return address;
+    }
+
+    public void makeTableItem(DefaultTableModel model){
+        Object[] rowData = {getId(),getName(),getGroup(),getGrade(),
+                                getClas(),getPhoneNum(),getEmail(),
+                                getDormitory(),getAddress()};
+        model.addRow(rowData);
     }
 }

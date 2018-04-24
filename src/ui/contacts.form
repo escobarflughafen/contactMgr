@@ -69,7 +69,10 @@
                   </grid>
                   <component id="bbe6f" class="javax.swing.JTable" binding="catalogue">
                     <constraints border-constraint="Center"/>
-                    <properties/>
+                    <properties>
+                      <gridColor color="-16777216"/>
+                      <showHorizontalLines value="true"/>
+                    </properties>
                   </component>
                 </children>
               </grid>

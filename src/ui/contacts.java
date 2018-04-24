@@ -3,11 +3,10 @@ package ui;
 import classes.member;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 
 
 public class contacts {
@@ -53,15 +52,31 @@ public class contacts {
     private JComboBox clasBox;
 
 
+    String items[] = {"ＩＤ", "Name", "Group", "Grade", "Class", "Phone", "Email", "Dormitory", "Address"};
+    DefaultTableModel infoModel = new DefaultTableModel(items, 0);
+
+
     public contacts() {
+
+        catalogue.setModel(infoModel);
+
 
         saveBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                member memInfo = new member(idTextField.getText(), nameTextField.getText(),
+                        groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
+                        gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
+                        clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
+                        teleNumTextField.getText(), emailTextField.getText(),
+                        dormTextField.getText(), addrTextField.getText());
+
+                memInfo.makeTableItem(infoModel);
 
             }
         });
+
     }
 
     private void createUIComponents() {
@@ -75,6 +90,7 @@ public class contacts {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setVisible(true);
+
     }
 
     {
@@ -133,6 +149,8 @@ public class contacts {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         SearchPanel.add(btnGo, gbc);
         catalogue = new JTable();
+        catalogue.setGridColor(new Color(-16777216));
+        catalogue.setShowHorizontalLines(true);
         contactTable.add(catalogue, BorderLayout.CENTER);
         tabbedPane1 = new JTabbedPane();
         mainSplit.setRightComponent(tabbedPane1);

@@ -22,8 +22,20 @@ public class login {
     private JLabel usernameLbl;
     private JLabel passwdLbl;
 
+    public static void main() {
+        login nl = new login();
+    }
+
 
     public login() {
+
+        JFrame frame = new JFrame("QG通讯录 登录");
+        frame.setContentPane(panel1);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setResizable(false);
+        frame.pack();
+        frame.setVisible(true);
+
         loginBtn.addMouseMotionListener(new MouseMotionAdapter() {
         });
         loginBtn.addMouseListener(new MouseAdapter() {
@@ -36,6 +48,8 @@ public class login {
                 if (user.getPassword().equals("123456") && user.getUsername().equals("abc")) {
                     new contacts();
                     contacts.main();
+                    frame.setVisible(false);
+
 
                 } else {
                     userTextField.setText("WRONG INFO");
@@ -43,15 +57,7 @@ public class login {
                 }
             }
         });
-    }
 
-    public static void main() {
-        JFrame frame = new JFrame("LOGIN");
-        frame.setContentPane(new login().panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.pack();
-        frame.setVisible(true);
     }
 
     private void createUIComponents() {
