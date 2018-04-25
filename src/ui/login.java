@@ -47,7 +47,6 @@ public class login {
 
                 if (user.getPassword().equals("123456") && user.getUsername().equals("abc")) {
                     new contacts();
-                    contacts.main();
                     frame.setVisible(false);
 
 

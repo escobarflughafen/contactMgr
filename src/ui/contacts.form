@@ -363,6 +363,13 @@
         <properties/>
         <border type="none"/>
         <children>
+          <component id="ef098" class="javax.swing.JButton" binding="revokeDeleteBtn">
+            <constraints/>
+            <properties>
+              <text value="撤销删除"/>
+              <visible value="true"/>
+            </properties>
+          </component>
           <component id="d5f22" class="javax.swing.JButton" binding="deleteBtn">
             <constraints/>
             <properties>
@@ -395,6 +402,12 @@
           </component>
         </children>
       </grid>
+      <toolbar id="12074" binding="toolbar">
+        <constraints border-constraint="North"/>
+        <properties/>
+        <border type="none"/>
+        <children/>
+      </toolbar>
     </children>
   </grid>
 </form>

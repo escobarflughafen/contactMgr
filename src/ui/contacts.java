@@ -10,6 +10,9 @@ import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.*;
 
+import utils.contactUtils.*;
+import java.util.Stack;
+import utils.revokeStack;
 
 public class contacts {
 
@@ -55,15 +58,21 @@ public class contacts {
     private JScrollPane contentsScrollPane;
     private JButton searchByCondBtn;
     private JButton savBtn;
+    private JButton revokeDeleteBtn;
+    private JToolBar toolbar;
 
 
     //status variables;
-    private int selectedRowIdx = 0; //selected row index in catalogue
-    private boolean isSaved = true;    //records whether the data is modified after saving or not
+    public int selectedRowIdx = 0; //selected row index in catalogue
+    public boolean isSaved = true;    //records whether the data is modified after saving or not
     private int rowCount = 0;
 
 
-    String colHeaders[] = {"ＩＤ", "Name", "Group", "Grade", "Class", "Phone", "Email", "Dormitory", "Address"};
+    //revoking stack
+    public revokeStack deletStack = new revokeStack();
+
+
+    String colHeaders[] = {"ID", "姓名", "方向", "年级", "班级", "电话", "电邮", "宿舍", "住址"};
 
     DefaultTableModel infoModel = new DefaultTableModel(colHeaders, 0);
 
@@ -71,12 +80,19 @@ public class contacts {
     public contacts() {
         catalogue.setModel(infoModel);
 
+        JFrame frame = new JFrame("contacts");
+        frame.setContentPane(panel1);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+
         //Table row selection Listener;
 
         catalogue.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
+                //  idTextField.setText(infoModel.getValueAt(selectedRowIdx, 0).toString());
             }
         });
 
@@ -92,7 +108,7 @@ public class contacts {
                         dormTextField.getText(), addrTextField.getText());
 
                 int tempRowIndex = selectedRowIdx;
-                infoModel.removeRow(selectedRowIdx);
+                infoModel.removeRow(tempRowIndex);
                 infoModel.insertRow(tempRowIndex, memInfo.getRecord());
 
 
@@ -105,6 +121,15 @@ public class contacts {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                //revokRow = {idTextField.getText(),nameTextField.getText(),groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),}
+
+                deletStack.enIndex(selectedRowIdx);
+                String[] row = {"", "", "", "", "", "", "", "", ""};
+                for (int i = 0; i < 9; i++) {
+                    row[i] = (catalogue.getValueAt(selectedRowIdx, i)).toString();
+                }
+
+                deletStack.enDelet(row);//
                 infoModel.removeRow(selectedRowIdx);
 
             }
@@ -115,9 +140,18 @@ public class contacts {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 String[] emptyRow = {""};
-                infoModel.insertRow((selectedRowIdx == 0 && rowCount == 0) ? selectedRowIdx : selectedRowIdx + 1, emptyRow);
+                infoModel.insertRow((selectedRowIdx == 0 && rowCount == 0) ? selectedRowIdx : selectedRowIdx + 1, emptyRow); // 插入空表：插入非空表
                 rowCount++;
                 isSaved = false;
+            }
+        });
+
+        revokeDeleteBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+
+                infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
             }
         });
     }
@@ -128,11 +162,7 @@ public class contacts {
     }
 
     public static void main() {
-        JFrame frame = new JFrame("contacts");
-        frame.setContentPane(new contacts().panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
+
 
     }
 
@@ -417,6 +447,10 @@ public class contacts {
         ctrlPanel = new JPanel();
         ctrlPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         panel1.add(ctrlPanel, BorderLayout.SOUTH);
+        revokeDeleteBtn = new JButton();
+        revokeDeleteBtn.setText("撤销删除");
+        revokeDeleteBtn.setVisible(true);
+        ctrlPanel.add(revokeDeleteBtn);
         deleteBtn = new JButton();
         deleteBtn.setText("删除选中");
         ctrlPanel.add(deleteBtn);
@@ -432,6 +466,8 @@ public class contacts {
         savBtn = new JButton();
         savBtn.setText("保存通讯录");
         ctrlPanel.add(savBtn);
+        toolbar = new JToolBar();
+        panel1.add(toolbar, BorderLayout.NORTH);
     }
 
     /**
