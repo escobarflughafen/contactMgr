@@ -6,12 +6,9 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
 import java.awt.*;
 import java.awt.event.*;
 
-import utils.contactUtils.*;
-import java.util.Stack;
 import utils.revokeStack;
 
 public class contacts {
@@ -19,7 +16,7 @@ public class contacts {
     private JPanel panel1;
     private JTextField searchTextField;
     private JButton btnGo;
-    private JPanel SearchPanel;
+    private JPanel modifyPane;
     private JTabbedPane tabbedPane1;
     private JButton saveBtn;
     private JButton createNewBtn;
@@ -40,7 +37,6 @@ public class contacts {
     private JPanel ctrlPanel;
     private JPanel tabBasePanel;
     private JPanel toModifyPanel;
-    private JPanel toSettingPanel;
     private JLabel idLbl;
     private JLabel nameLbl;
     private JLabel direLbl;
@@ -59,7 +55,11 @@ public class contacts {
     private JButton searchByCondBtn;
     private JButton savBtn;
     private JButton revokeDeleteBtn;
-    private JToolBar toolbar;
+    private JPanel btnPane;
+    private JPanel userPane;
+    private JButton editProfileBtn;
+    private JPanel btnPane2;
+    private JTable infoTable;
 
 
     //status variables;
@@ -124,9 +124,11 @@ public class contacts {
                 //revokRow = {idTextField.getText(),nameTextField.getText(),groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),}
 
                 deletStack.enIndex(selectedRowIdx);
-                String[] row = {"", "", "", "", "", "", "", "", ""};
+
+                String[] row = new String[9];
                 for (int i = 0; i < 9; i++) {
                     row[i] = (catalogue.getValueAt(selectedRowIdx, i)).toString();
+                    System.out.println((catalogue.getValueAt(selectedRowIdx, i)).toString());
                 }
 
                 deletStack.enDelet(row);//
@@ -152,6 +154,12 @@ public class contacts {
                 super.mouseClicked(e);
 
                 infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
+            }
+        });
+        ex2csvBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
             }
         });
     }
@@ -199,20 +207,23 @@ public class contacts {
         contactTable = new JPanel();
         contactTable.setLayout(new BorderLayout(0, 0));
         mainSplit.setLeftComponent(contactTable);
-        SearchPanel = new JPanel();
-        SearchPanel.setLayout(new GridBagLayout());
-        contactTable.add(SearchPanel, BorderLayout.NORTH);
+        modifyPane = new JPanel();
+        modifyPane.setLayout(new GridBagLayout());
+        modifyPane.setFocusable(true);
+        modifyPane.setName("");
+        modifyPane.setToolTipText("");
+        contactTable.add(modifyPane, BorderLayout.NORTH);
         searchTextField = new JTextField();
-        searchTextField.setText("查询");
+        searchTextField.setText("Keywords");
+        searchTextField.setToolTipText("输入搜索内容");
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
-        gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        SearchPanel.add(searchTextField, gbc);
+        modifyPane.add(searchTextField, gbc);
         btnGo = new JButton();
         btnGo.setText("Go");
         gbc = new GridBagConstraints();
@@ -220,8 +231,23 @@ public class contacts {
         gbc.gridy = 0;
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        SearchPanel.add(btnGo, gbc);
+        modifyPane.add(btnGo, gbc);
+        btnPane = new JPanel();
+        btnPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        gbc = new GridBagConstraints();
+        gbc.gridx = 2;
+        gbc.gridy = 0;
+        modifyPane.add(btnPane, gbc);
+        deleteBtn = new JButton();
+        deleteBtn.setText("删除选中");
+        btnPane.add(deleteBtn);
+        revokeDeleteBtn = new JButton();
+        revokeDeleteBtn.setText("撤销删除");
+        revokeDeleteBtn.setVisible(true);
+        btnPane.add(revokeDeleteBtn);
         contentsScrollPane = new JScrollPane();
+        Font contentsScrollPaneFont = this.$$$getFont$$$(null, -1, 16, contentsScrollPane.getFont());
+        if (contentsScrollPaneFont != null) contentsScrollPane.setFont(contentsScrollPaneFont);
         contactTable.add(contentsScrollPane, BorderLayout.CENTER);
         catalogue = new JTable();
         catalogue.setGridColor(new Color(-16777216));
@@ -253,7 +279,7 @@ public class contacts {
         createNewBtn.putClientProperty("html.disable", Boolean.FALSE);
         checkPanel.add(createNewBtn);
         detailScrollPanel = new JScrollPane();
-        detailScrollPanel.setVerticalScrollBarPolicy(22);
+        detailScrollPanel.setVerticalScrollBarPolicy(20);
         toModifyPanel.add(detailScrollPanel, BorderLayout.CENTER);
         detailPanel = new JPanel();
         detailPanel.setLayout(new GridBagLayout());
@@ -447,13 +473,6 @@ public class contacts {
         ctrlPanel = new JPanel();
         ctrlPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         panel1.add(ctrlPanel, BorderLayout.SOUTH);
-        revokeDeleteBtn = new JButton();
-        revokeDeleteBtn.setText("撤销删除");
-        revokeDeleteBtn.setVisible(true);
-        ctrlPanel.add(revokeDeleteBtn);
-        deleteBtn = new JButton();
-        deleteBtn.setText("删除选中");
-        ctrlPanel.add(deleteBtn);
         searchByCondBtn = new JButton();
         searchByCondBtn.setText("条件查询");
         ctrlPanel.add(searchByCondBtn);
@@ -466,8 +485,25 @@ public class contacts {
         savBtn = new JButton();
         savBtn.setText("保存通讯录");
         ctrlPanel.add(savBtn);
-        toolbar = new JToolBar();
-        panel1.add(toolbar, BorderLayout.NORTH);
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        return new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
     }
 
     /**

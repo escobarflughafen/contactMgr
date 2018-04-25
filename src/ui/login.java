@@ -50,6 +50,7 @@ public class login {
                     frame.setVisible(false);
 
 
+
                 } else {
                     userTextField.setText("WRONG INFO");
 

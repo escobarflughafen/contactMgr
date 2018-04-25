@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ui.contacts">
   <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="20" y="20" width="681" height="591"/>
+      <xy x="20" y="20" width="809" height="591"/>
     </constraints>
     <properties>
       <minimumSize width="512" height="384"/>
@@ -40,20 +40,25 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <grid id="a6f0e" binding="SearchPanel" layout-manager="GridBagLayout">
+                  <grid id="a6f0e" binding="modifyPane" layout-manager="GridBagLayout">
                     <constraints border-constraint="North"/>
-                    <properties/>
+                    <properties>
+                      <focusable value="true"/>
+                      <name value=""/>
+                      <toolTipText value=""/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="ddec6" class="javax.swing.JTextField" binding="searchTextField">
                         <constraints>
-                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="8" fill="1" indent="0" use-parent-layout="false">
+                          <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
                             <preferred-size width="150" height="-1"/>
                           </grid>
                           <gridbag weightx="1.0" weighty="1.0"/>
                         </constraints>
                         <properties>
-                          <text value="查询"/>
+                          <text value="Keywords"/>
+                          <toolTipText value="输入搜索内容"/>
                         </properties>
                       </component>
                       <component id="76fc3" class="javax.swing.JButton" binding="btnGo">
@@ -65,11 +70,36 @@
                           <text value="Go"/>
                         </properties>
                       </component>
+                      <grid id="6827c" binding="btnPane" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+                        <constraints>
+                          <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="d5f22" class="javax.swing.JButton" binding="deleteBtn">
+                            <constraints/>
+                            <properties>
+                              <text value="删除选中"/>
+                            </properties>
+                          </component>
+                          <component id="ef098" class="javax.swing.JButton" binding="revokeDeleteBtn">
+                            <constraints/>
+                            <properties>
+                              <text value="撤销删除"/>
+                              <visible value="true"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
                     </children>
                   </grid>
                   <scrollpane id="b8548" binding="contentsScrollPane">
                     <constraints border-constraint="Center"/>
-                    <properties/>
+                    <properties>
+                      <font size="16"/>
+                    </properties>
                     <border type="none"/>
                     <children>
                       <component id="bbe6f" class="javax.swing.JTable" binding="catalogue">
@@ -132,7 +162,7 @@
                       <scrollpane id="a7aaf" binding="detailScrollPanel">
                         <constraints border-constraint="Center"/>
                         <properties>
-                          <verticalScrollBarPolicy value="22"/>
+                          <verticalScrollBarPolicy value="20"/>
                         </properties>
                         <border type="none"/>
                         <children>
@@ -344,13 +374,38 @@
                       </scrollpane>
                     </children>
                   </grid>
-                  <grid id="3fdb6" binding="toSettingPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+                  <grid id="ea8ef" binding="userPane" layout-manager="BorderLayout" hgap="0" vgap="0">
                     <constraints>
-                      <tabbedpane title="设置"/>
+                      <tabbedpane title="用户"/>
                     </constraints>
                     <properties/>
                     <border type="none"/>
-                    <children/>
+                    <children>
+                      <grid id="734f6" binding="btnPane2" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints border-constraint="South"/>
+                        <properties/>
+                        <border type="none"/>
+                        <children>
+                          <component id="7bf1c" class="javax.swing.JButton" binding="editProfileBtn">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <text value="修改用户信息"/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <scrollpane id="3a127">
+                        <constraints border-constraint="Center"/>
+                        <properties/>
+                        <border type="none" title="用户信息"/>
+                        <children>
+                          <component id="3f245" class="javax.swing.JTable" binding="infoTable">
+                            <constraints/>
+                            <properties/>
+                          </component>
+                        </children>
+                      </scrollpane>
+                    </children>
                   </grid>
                 </children>
               </tabbedpane>
@@ -363,19 +418,6 @@
         <properties/>
         <border type="none"/>
         <children>
-          <component id="ef098" class="javax.swing.JButton" binding="revokeDeleteBtn">
-            <constraints/>
-            <properties>
-              <text value="撤销删除"/>
-              <visible value="true"/>
-            </properties>
-          </component>
-          <component id="d5f22" class="javax.swing.JButton" binding="deleteBtn">
-            <constraints/>
-            <properties>
-              <text value="删除选中"/>
-            </properties>
-          </component>
           <component id="84c9c" class="javax.swing.JButton" binding="searchByCondBtn">
             <constraints/>
             <properties>
@@ -402,12 +444,6 @@
           </component>
         </children>
       </grid>
-      <toolbar id="12074" binding="toolbar">
-        <constraints border-constraint="North"/>
-        <properties/>
-        <border type="none"/>
-        <children/>
-      </toolbar>
     </children>
   </grid>
 </form>

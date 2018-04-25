@@ -33,5 +33,6 @@ public class admin {
                 ", username = " + username + '\\' +
                 ", password = " + password + '\\' +
                 '}');
+
     }
 }
