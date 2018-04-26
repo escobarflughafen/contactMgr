@@ -46,7 +46,7 @@ public class login {
                 admin user = new admin(userTextField.getText(), passwd);
 
                 if (user.getPassword().equals("123456") && user.getUsername().equals("abc")) {
-                    new contacts();
+                    new contacts(user.getUsername());
                     frame.setVisible(false);
 
 

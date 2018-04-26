@@ -81,7 +81,7 @@
                           <component id="d5f22" class="javax.swing.JButton" binding="deleteBtn">
                             <constraints/>
                             <properties>
-                              <text value="删除选中"/>
+                              <text value="删除"/>
                             </properties>
                           </component>
                           <component id="ef098" class="javax.swing.JButton" binding="revokeDeleteBtn">
@@ -106,6 +106,8 @@
                         <constraints/>
                         <properties>
                           <gridColor color="-16777216"/>
+                          <selectionBackground color="-1"/>
+                          <selectionForeground color="-1250068"/>
                           <showHorizontalLines value="true"/>
                           <visible value="true"/>
                         </properties>
@@ -394,14 +396,18 @@
                           </component>
                         </children>
                       </grid>
-                      <scrollpane id="3a127">
+                      <scrollpane id="3a127" binding="userInfoPane">
                         <constraints border-constraint="Center"/>
                         <properties/>
-                        <border type="none" title="用户信息"/>
+                        <border type="none" title="用户信息">
+                          <title-color color="-16777216"/>
+                        </border>
                         <children>
                           <component id="3f245" class="javax.swing.JTable" binding="infoTable">
                             <constraints/>
-                            <properties/>
+                            <properties>
+                              <selectionForeground color="-1250068"/>
+                            </properties>
                           </component>
                         </children>
                       </scrollpane>
@@ -416,7 +422,9 @@
       <grid id="e9a9d" binding="ctrlPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
         <constraints border-constraint="South"/>
         <properties/>
-        <border type="none"/>
+        <border type="none">
+          <title-color color="-16777216"/>
+        </border>
         <children>
           <component id="84c9c" class="javax.swing.JButton" binding="searchByCondBtn">
             <constraints/>

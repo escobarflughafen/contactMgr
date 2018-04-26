@@ -3,13 +3,17 @@ package ui;
 import classes.member;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
 
 import utils.revokeStack;
+import utils.csvUtil;
+import utils.contactUtils;
 
 public class contacts {
 
@@ -60,25 +64,33 @@ public class contacts {
     private JButton editProfileBtn;
     private JPanel btnPane2;
     private JTable infoTable;
+    private JScrollPane userInfoPane;
 
 
     //status variables;
     public int selectedRowIdx = 0; //selected row index in catalogue
     public boolean isSaved = true;    //records whether the data is modified after saving or not
     private int rowCount = 0;
+    private String username;
 
 
     //revoking stack
     public revokeStack deletStack = new revokeStack();
+    public contactUtils infoCreater = new contactUtils();
 
 
     String colHeaders[] = {"ID", "姓名", "方向", "年级", "班级", "电话", "电邮", "宿舍", "住址"};
+    String userInfoHeaders[] = {"项", "值"};
 
     DefaultTableModel infoModel = new DefaultTableModel(colHeaders, 0);
+    DefaultTableModel userInfoModel = new DefaultTableModel(userInfoHeaders, 0);
 
-
-    public contacts() {
+    public contacts(String username) {
+        this.username = username;
         catalogue.setModel(infoModel);
+        infoTable.setModel(userInfoModel);
+        infoCreater.setUsername(username);
+        infoCreater.setUserInfo(userInfoModel);
 
         JFrame frame = new JFrame("contacts");
         frame.setContentPane(panel1);
@@ -160,6 +172,9 @@ public class contacts {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                csvUtil csvMaker = new csvUtil("t01.csv", catalogue);
+                csvMaker.tabletoCSV();
+
             }
         });
     }
@@ -239,7 +254,7 @@ public class contacts {
         gbc.gridy = 0;
         modifyPane.add(btnPane, gbc);
         deleteBtn = new JButton();
-        deleteBtn.setText("删除选中");
+        deleteBtn.setText("删除");
         btnPane.add(deleteBtn);
         revokeDeleteBtn = new JButton();
         revokeDeleteBtn.setText("撤销删除");
@@ -251,6 +266,8 @@ public class contacts {
         contactTable.add(contentsScrollPane, BorderLayout.CENTER);
         catalogue = new JTable();
         catalogue.setGridColor(new Color(-16777216));
+        catalogue.setSelectionBackground(new Color(-1));
+        catalogue.setSelectionForeground(new Color(-1250068));
         catalogue.setShowHorizontalLines(true);
         catalogue.setVisible(true);
         contentsScrollPane.setViewportView(catalogue);
@@ -467,9 +484,21 @@ public class contacts {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         detailPanel.add(clasBox, gbc);
-        toSettingPanel = new JPanel();
-        toSettingPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        tabbedPane1.addTab("设置", toSettingPanel);
+        userPane = new JPanel();
+        userPane.setLayout(new BorderLayout(0, 0));
+        tabbedPane1.addTab("用户", userPane);
+        btnPane2 = new JPanel();
+        btnPane2.setLayout(new BorderLayout(0, 0));
+        userPane.add(btnPane2, BorderLayout.SOUTH);
+        editProfileBtn = new JButton();
+        editProfileBtn.setText("修改用户信息");
+        btnPane2.add(editProfileBtn, BorderLayout.CENTER);
+        userInfoPane = new JScrollPane();
+        userPane.add(userInfoPane, BorderLayout.CENTER);
+        userInfoPane.setBorder(BorderFactory.createTitledBorder(null, "用户信息", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(-16777216)));
+        infoTable = new JTable();
+        infoTable.setSelectionForeground(new Color(-1250068));
+        userInfoPane.setViewportView(infoTable);
         ctrlPanel = new JPanel();
         ctrlPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         panel1.add(ctrlPanel, BorderLayout.SOUTH);
