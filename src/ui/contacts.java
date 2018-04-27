@@ -109,7 +109,7 @@ public class contacts {
                 selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
                 //  idTextField.setText(infoModel.getValueAt(selectedRowIdx, 0).toString());
 
-                if (selectedRowIdx != -1) {
+                if (selectedRowIdx >= 0) {
                     String row[] = new String[columnCount];
                     Integer classInt = new Integer(5);
 
@@ -178,20 +178,21 @@ public class contacts {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                member memInfo = new member(idTextField.getText(), nameTextField.getText(),
-                        groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
-                        gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
-                        clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
-                        teleNumTextField.getText(), emailTextField.getText(),
-                        dormTextField.getText(), addrTextField.getText());
+                if (selectedRowIdx >= 0) {
+                    member memInfo = new member(idTextField.getText(), nameTextField.getText(),
+                            groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
+                            gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
+                            clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
+                            teleNumTextField.getText(), emailTextField.getText(),
+                            dormTextField.getText(), addrTextField.getText());
 
-                int tempRowIndex = selectedRowIdx;
-                infoModel.removeRow(tempRowIndex);
-                infoModel.insertRow(tempRowIndex, memInfo.getRecord());
+                    int tempRowIndex = selectedRowIdx;
+                    infoModel.removeRow(tempRowIndex);
+                    infoModel.insertRow(tempRowIndex, memInfo.getRecord());
 
 
-                isSaved = false;
-
+                    isSaved = false;
+                }
             }
         });
 
@@ -201,18 +202,21 @@ public class contacts {
                 super.mouseClicked(e);
                 //revokRow = {idTextField.getText(),nameTextField.getText(),groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),}
 
-                deletStack.enIndex(selectedRowIdx);
+                if (selectedRowIdx >= 0) {
 
-                String[] row = new String[columnCount];
-                for (int i = 0; i < columnCount; i++) {
-                    row[i] = (catalogue.getValueAt(selectedRowIdx, i)).toString();
-                    System.out.println((catalogue.getValueAt(selectedRowIdx, i)).toString());
+                    deletStack.enIndex(selectedRowIdx);
+                    String[] row = new String[columnCount];
+                    for (int i = 0; i < columnCount; i++) {
+                        row[i] = (catalogue.getValueAt(selectedRowIdx, i) == null) ? "" : catalogue.getValueAt(selectedRowIdx, i).toString();
+                        System.out.println(row[i]);
+                    }
+
+                    deletStack.enDelet(row);//
+                    infoModel.removeRow(selectedRowIdx);
+
                 }
-
-                deletStack.enDelet(row);//
-                infoModel.removeRow(selectedRowIdx);
-
             }
+
         });
 
         createNewBtn.addMouseListener(new MouseAdapter() {
@@ -230,8 +234,9 @@ public class contacts {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-
-                infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
+                if (selectedRowIdx >= 0) {
+                    infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
+                }
             }
         });
         ex2csvBtn.addMouseListener(new MouseAdapter() {
@@ -334,7 +339,7 @@ public class contacts {
         contactTable.add(contentsScrollPane, BorderLayout.CENTER);
         catalogue = new JTable();
         catalogue.setGridColor(new Color(-16777216));
-        catalogue.setSelectionBackground(new Color(-12871172));
+        catalogue.setSelectionBackground(new Color(-1));
         catalogue.setSelectionForeground(new Color(-12871172));
         catalogue.setShowHorizontalLines(true);
         catalogue.setVisible(true);
