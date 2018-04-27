@@ -2,23 +2,17 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="d6945baf-d3b2-438f-9272-ad16a81d24f4" name="Default" comment="">
+      <change afterPath="$PROJECT_DIR$/src/ui/csvDiag.form" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/ui/csvDiag.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$3.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$4.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$5.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/login$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/login$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/login.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/login.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/utils/contactUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/utils/contactUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/csv/t01.csv" beforeDir="false" afterPath="$PROJECT_DIR$/csv/t01.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$6.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/ui/contacts$6.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/utils/csvUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/lijianing_QGaddressbook/utils/csvUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/classes/member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/classes/member.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/contacts.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/contacts.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/contacts.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/contacts.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/login.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/login.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/modifyUserProfileDiag.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/modifyUserProfileDiag.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ui/modifyUserProfileDiag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/modifyUserProfileDiag.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/utils/contactUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/contactUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/csvUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/csvUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/utils/csvUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/csvUtil.java" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -33,8 +27,8 @@
       <file leaf-file-name="member.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/classes/member.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="495">
-              <caret line="35" selection-start-line="35" selection-end-line="35" />
+            <state relative-caret-position="1305">
+              <caret line="123" column="24" selection-start-line="123" selection-start-column="24" selection-end-line="123" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -42,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="csvUtil.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="csvUtil.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/utils/csvUtil.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="801">
-              <caret line="77" selection-start-line="77" selection-end-line="77" />
+            <state relative-caret-position="-200">
+              <caret line="31" column="24" lean-forward="true" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -59,25 +53,42 @@
           <provider selected="true" editor-type-id="ui-designer" />
         </entry>
       </file>
-      <file leaf-file-name="contacts.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="csvDiag.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/ui/csvDiag.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="60">
+              <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+              <folding>
+                <element signature="initializer##0;class#csvDiag#0" expanded="true" />
+                <element signature="initializer##0;class#csvDiag#0" expanded="true" />
+                <element signature="e#4223#4224#0" expanded="true" />
+                <element signature="e#4257#4258#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="contacts.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ui/contacts.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="344">
-              <caret line="175" column="38" selection-start-line="175" selection-start-column="38" selection-end-line="175" selection-end-column="38" />
+            <state relative-caret-position="557">
+              <caret line="141" column="34" lean-forward="true" selection-start-line="141" selection-start-column="34" selection-end-line="141" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3212#4076#0" expanded="true" />
-                <element signature="e#4075#4076#0" expanded="true" />
-                <element signature="e#4115#4849#0" expanded="true" />
-                <element signature="e#4848#4849#0" expanded="true" />
-                <element signature="e#4891#5291#0" expanded="true" />
-                <element signature="e#5290#5291#0" expanded="true" />
-                <element signature="e#5336#5579#0" expanded="true" />
-                <element signature="e#5578#5579#0" expanded="true" />
-                <element signature="e#5617#5886#0" expanded="true" />
-                <element signature="e#5885#5886#0" expanded="true" />
+                <element signature="e#6101#6965#0" expanded="true" />
+                <element signature="e#6964#6965#0" expanded="true" />
+                <element signature="e#7004#7758#0" expanded="true" />
+                <element signature="e#7757#7758#0" expanded="true" />
+                <element signature="e#7800#8200#0" expanded="true" />
+                <element signature="e#8199#8200#0" expanded="true" />
+                <element signature="e#8245#8488#0" expanded="true" />
+                <element signature="e#8487#8488#0" expanded="true" />
+                <element signature="e#8526#8794#0" expanded="true" />
+                <element signature="e#8793#8794#0" expanded="true" />
                 <element signature="initializer##0;class#contacts#0" expanded="true" />
                 <element signature="initializer##0;class#contacts#0" expanded="true" />
+                <element signature="e#22691#22692#0" expanded="true" />
+                <element signature="e#22720#22721#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -86,12 +97,8 @@
       <file leaf-file-name="modifyUserProfileDiag.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/ui/modifyUserProfileDiag.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="135">
-              <caret line="11" column="42" lean-forward="true" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
-              <folding>
-                <element signature="initializer##0;class#modifyUserProfileDiag#0" expanded="true" />
-                <element signature="initializer##0;class#modifyUserProfileDiag#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="100">
+              <caret line="11" column="42" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
             </state>
           </provider>
         </entry>
@@ -99,8 +106,8 @@
       <file leaf-file-name="revokeStack.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/utils/revokeStack.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="14" selection-start-column="14" selection-end-column="14" />
+            <state relative-caret-position="105">
+              <caret line="7" column="56" lean-forward="true" selection-start-line="7" selection-start-column="56" selection-end-line="7" selection-end-column="56" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -112,7 +119,7 @@
         <entry file="file://$PROJECT_DIR$/src/ui/login.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="505">
-              <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+              <caret line="50" selection-start-line="50" selection-end-line="50" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#587#588#0" expanded="true" />
@@ -122,30 +129,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="commitSaveDiag.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/ui/commitSaveDiag.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="615">
-              <caret line="53" column="42" selection-start-line="53" selection-start-column="42" selection-end-line="53" selection-end-column="42" />
-              <folding>
-                <element signature="e#5100#5101#0" expanded="true" />
-                <element signature="e#5134#5135#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="contactUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/utils/contactUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="585">
-              <caret line="39" column="39" lean-forward="true" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
+            <state relative-caret-position="165">
+              <caret line="11" selection-start-line="11" selection-end-line="11" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#430#431#0" expanded="true" />
-                <element signature="e#460#461#0" expanded="true" />
-                <element signature="e#520#521#0" expanded="true" />
-                <element signature="e#560#561#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -171,6 +161,8 @@
       <find>JTa</find>
       <find>char[]</find>
       <find>model</find>
+      <find>csv</find>
+      <find>9</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -186,7 +178,6 @@
         <option value="$PROJECT_DIR$/src/form/contacts.form" />
         <option value="$PROJECT_DIR$/src/utils/contacts.java" />
         <option value="$PROJECT_DIR$/src/ui/login.form" />
-        <option value="$PROJECT_DIR$/src/classes/member.java" />
         <option value="$PROJECT_DIR$/src/ui/commitSaveDiag.form" />
         <option value="$PROJECT_DIR$/src/utils/loginUtils.java" />
         <option value="$PROJECT_DIR$/src/classes/admin.java" />
@@ -195,17 +186,19 @@
         <option value="$PROJECT_DIR$/src/ui/modifyUserProfileDiag.form" />
         <option value="$PROJECT_DIR$/src/utils/csvUtils.java" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/jshell/jshell_console_1.snippet" />
-        <option value="$PROJECT_DIR$/src/ui/contacts.form" />
         <option value="$PROJECT_DIR$/src/ui/login.java" />
+        <option value="$PROJECT_DIR$/src/ui/csvDiag.form" />
         <option value="$PROJECT_DIR$/src/utils/contactUtils.java" />
+        <option value="$PROJECT_DIR$/src/classes/member.java" />
         <option value="$PROJECT_DIR$/src/utils/csvUtil.java" />
+        <option value="$PROJECT_DIR$/src/ui/contacts.form" />
         <option value="$PROJECT_DIR$/src/ui/contacts.java" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6" fullScreen="true">
-    <option name="x" value="-1629" />
-    <option name="width" value="1629" />
+    <option name="x" value="-1920" />
+    <option name="width" value="1920" />
     <option name="height" value="1080" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -214,8 +207,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
       <pane id="AndroidView" />
       <pane id="ProjectPane">
         <subPane>
@@ -275,6 +266,8 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -378,23 +371,23 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1629" y="0" width="1629" height="1080" extended-state="6" />
+    <frame x="-1920" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info anchor="right" id="Palette" order="3" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.43891957" weight="0.25097275" />
+      <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4328125" weight="0.25" />
       <window_info anchor="right" id="Palette&#9;" order="7" />
       <window_info id="Image Layers" order="2" />
       <window_info anchor="right" id="Capture Analysis" order="4" />
-      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.5518723" side_tool="true" visible="true" weight="0.12451362" />
+      <window_info anchor="bottom" id="Event Log" order="7" sideWeight="0.55885416" side_tool="true" visible="true" weight="0.12451362" />
       <window_info anchor="right" id="Maven Projects" order="6" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.4481277" visible="true" weight="0.12451362" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" sideWeight="0.44114584" visible="true" weight="0.12451362" />
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Terminal" order="9" />
       <window_info id="Capture Tool" order="3" />
       <window_info id="Designer" order="4" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21608348" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.215625" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="bottom" x="28" y="162" width="261" height="547" id="UI Designer" order="11" type="FLOATING" />
@@ -402,11 +395,11 @@
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.497921" weight="0.39976415" />
       <window_info id="Favorites" order="5" side_tool="true" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49909747" weight="0.27134147" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
-      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" sideWeight="0.49909747" weight="0.27134147" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -418,6 +411,69 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/src/ui/modifyUserProfileDiag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="135">
+          <caret line="11" column="42" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/revokeStack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="14" selection-start-column="14" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ui/login.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="50" selection-start-line="50" selection-end-line="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#587#588#0" expanded="true" />
+            <element signature="e#625#626#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/contactUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/ui/contacts.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1185">
+          <caret line="92" column="46" selection-start-line="92" selection-start-column="46" selection-end-line="92" selection-end-column="46" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#6101#6965#0" expanded="true" />
+            <element signature="e#6964#6965#0" expanded="true" />
+            <element signature="e#7004#7758#0" expanded="true" />
+            <element signature="e#7757#7758#0" expanded="true" />
+            <element signature="e#7800#8200#0" expanded="true" />
+            <element signature="e#8199#8200#0" expanded="true" />
+            <element signature="e#8245#8488#0" expanded="true" />
+            <element signature="e#8487#8488#0" expanded="true" />
+            <element signature="e#8526#8794#0" expanded="true" />
+            <element signature="e#8793#8794#0" expanded="true" />
+            <element signature="initializer##0;class#contacts#0" expanded="true" />
+            <element signature="initializer##0;class#contacts#0" expanded="true" />
+            <element signature="e#22691#22692#0" expanded="true" />
+            <element signature="e#22720#22721#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/classes/member.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="810">
@@ -434,18 +490,20 @@
           <caret line="308" column="45" lean-forward="true" selection-start-line="308" selection-start-column="45" selection-end-line="308" selection-end-column="45" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3212#4076#0" expanded="true" />
-            <element signature="e#4075#4076#0" expanded="true" />
-            <element signature="e#4115#4849#0" expanded="true" />
-            <element signature="e#4848#4849#0" expanded="true" />
-            <element signature="e#4891#5291#0" expanded="true" />
-            <element signature="e#5290#5291#0" expanded="true" />
-            <element signature="e#5336#5579#0" expanded="true" />
-            <element signature="e#5578#5579#0" expanded="true" />
-            <element signature="e#5617#5886#0" expanded="true" />
-            <element signature="e#5885#5886#0" expanded="true" />
+            <element signature="e#6101#6965#0" expanded="true" />
+            <element signature="e#6964#6965#0" expanded="true" />
+            <element signature="e#7004#7758#0" expanded="true" />
+            <element signature="e#7757#7758#0" expanded="true" />
+            <element signature="e#7800#8200#0" expanded="true" />
+            <element signature="e#8199#8200#0" expanded="true" />
+            <element signature="e#8245#8488#0" expanded="true" />
+            <element signature="e#8487#8488#0" expanded="true" />
+            <element signature="e#8526#8794#0" expanded="true" />
+            <element signature="e#8793#8794#0" expanded="true" />
             <element signature="initializer##0;class#contacts#0" expanded="true" />
             <element signature="initializer##0;class#contacts#0" expanded="true" />
+            <element signature="e#22691#22692#0" expanded="true" />
+            <element signature="e#22720#22721#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -454,10 +512,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding>
-            <element signature="initializer##0;class#modifyUserProfileDiag#0" expanded="true" />
-            <element signature="initializer##0;class#modifyUserProfileDiag#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -510,10 +564,6 @@
           <caret line="10" column="12" selection-start-line="10" selection-start-column="12" selection-end-line="10" selection-end-column="12" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#430#431#0" expanded="true" />
-            <element signature="e#460#461#0" expanded="true" />
-            <element signature="e#520#521#0" expanded="true" />
-            <element signature="e#560#561#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -570,18 +620,20 @@
           <caret line="79" column="16" selection-start-line="79" selection-start-column="16" selection-end-line="79" selection-end-column="16" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3212#4076#0" expanded="true" />
-            <element signature="e#4075#4076#0" expanded="true" />
-            <element signature="e#4115#4849#0" expanded="true" />
-            <element signature="e#4848#4849#0" expanded="true" />
-            <element signature="e#4891#5291#0" expanded="true" />
-            <element signature="e#5290#5291#0" expanded="true" />
-            <element signature="e#5336#5579#0" expanded="true" />
-            <element signature="e#5578#5579#0" expanded="true" />
-            <element signature="e#5617#5886#0" expanded="true" />
-            <element signature="e#5885#5886#0" expanded="true" />
+            <element signature="e#6101#6965#0" expanded="true" />
+            <element signature="e#6964#6965#0" expanded="true" />
+            <element signature="e#7004#7758#0" expanded="true" />
+            <element signature="e#7757#7758#0" expanded="true" />
+            <element signature="e#7800#8200#0" expanded="true" />
+            <element signature="e#8199#8200#0" expanded="true" />
+            <element signature="e#8245#8488#0" expanded="true" />
+            <element signature="e#8487#8488#0" expanded="true" />
+            <element signature="e#8526#8794#0" expanded="true" />
+            <element signature="e#8793#8794#0" expanded="true" />
             <element signature="initializer##0;class#contacts#0" expanded="true" />
             <element signature="initializer##0;class#contacts#0" expanded="true" />
+            <element signature="e#22691#22692#0" expanded="true" />
+            <element signature="e#22720#22721#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -628,18 +680,20 @@
           <caret line="73" column="5" lean-forward="true" selection-start-line="73" selection-start-column="5" selection-end-line="73" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3212#4076#0" expanded="true" />
-            <element signature="e#4075#4076#0" expanded="true" />
-            <element signature="e#4115#4849#0" expanded="true" />
-            <element signature="e#4848#4849#0" expanded="true" />
-            <element signature="e#4891#5291#0" expanded="true" />
-            <element signature="e#5290#5291#0" expanded="true" />
-            <element signature="e#5336#5579#0" expanded="true" />
-            <element signature="e#5578#5579#0" expanded="true" />
-            <element signature="e#5617#5886#0" expanded="true" />
-            <element signature="e#5885#5886#0" expanded="true" />
+            <element signature="e#6101#6965#0" expanded="true" />
+            <element signature="e#6964#6965#0" expanded="true" />
+            <element signature="e#7004#7758#0" expanded="true" />
+            <element signature="e#7757#7758#0" expanded="true" />
+            <element signature="e#7800#8200#0" expanded="true" />
+            <element signature="e#8199#8200#0" expanded="true" />
+            <element signature="e#8245#8488#0" expanded="true" />
+            <element signature="e#8487#8488#0" expanded="true" />
+            <element signature="e#8526#8794#0" expanded="true" />
+            <element signature="e#8793#8794#0" expanded="true" />
             <element signature="initializer##0;class#contacts#0" expanded="true" />
             <element signature="initializer##0;class#contacts#0" expanded="true" />
+            <element signature="e#22691#22692#0" expanded="true" />
+            <element signature="e#22720#22721#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -721,34 +775,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/classes/member.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="495">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_CONFIG_DIR$/consoles/jshell/jshell_console_1.snippet">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="24" lean-forward="true" selection-start-line="2" selection-start-column="24" selection-end-line="2" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/contactUtils.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="585">
-          <caret line="39" column="39" lean-forward="true" selection-start-line="39" selection-start-column="39" selection-end-line="39" selection-end-column="39" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#430#431#0" expanded="true" />
-            <element signature="e#460#461#0" expanded="true" />
-            <element signature="e#520#521#0" expanded="true" />
-            <element signature="e#560#561#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -763,13 +793,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ui/modifyUserProfileDiag.java">
+    <entry file="file://$PROJECT_DIR$/src/classes/member.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="11" column="42" lean-forward="true" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
+        <state relative-caret-position="1305">
+          <caret line="123" column="24" selection-start-line="123" selection-start-column="24" selection-end-line="123" selection-end-column="24" />
           <folding>
-            <element signature="initializer##0;class#modifyUserProfileDiag#0" expanded="true" />
-            <element signature="initializer##0;class#modifyUserProfileDiag#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/contactUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="165">
+          <caret line="11" selection-start-line="11" selection-end-line="11" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/revokeStack.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="7" column="56" lean-forward="true" selection-start-line="7" selection-start-column="56" selection-end-line="7" selection-end-column="56" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -777,7 +826,7 @@
     <entry file="file://$PROJECT_DIR$/src/ui/login.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="505">
-          <caret line="50" lean-forward="true" selection-start-line="50" selection-end-line="50" />
+          <caret line="50" selection-start-line="50" selection-end-line="50" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#587#588#0" expanded="true" />
@@ -786,22 +835,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/revokeStack.java">
+    <entry file="file://$PROJECT_DIR$/src/ui/modifyUserProfileDiag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="14" selection-start-column="14" selection-end-column="14" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="100">
+          <caret line="11" column="42" selection-start-line="11" selection-start-column="42" selection-end-line="11" selection-end-column="42" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/utils/csvUtil.java">
+    <entry file="file://$PROJECT_DIR$/src/ui/contacts.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="801">
-          <caret line="77" selection-start-line="77" selection-end-line="77" />
+        <state relative-caret-position="557">
+          <caret line="141" column="34" lean-forward="true" selection-start-line="141" selection-start-column="34" selection-end-line="141" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#6101#6965#0" expanded="true" />
+            <element signature="e#6964#6965#0" expanded="true" />
+            <element signature="e#7004#7758#0" expanded="true" />
+            <element signature="e#7757#7758#0" expanded="true" />
+            <element signature="e#7800#8200#0" expanded="true" />
+            <element signature="e#8199#8200#0" expanded="true" />
+            <element signature="e#8245#8488#0" expanded="true" />
+            <element signature="e#8487#8488#0" expanded="true" />
+            <element signature="e#8526#8794#0" expanded="true" />
+            <element signature="e#8793#8794#0" expanded="true" />
+            <element signature="initializer##0;class#contacts#0" expanded="true" />
+            <element signature="initializer##0;class#contacts#0" expanded="true" />
+            <element signature="e#22691#22692#0" expanded="true" />
+            <element signature="e#22720#22721#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -809,24 +869,25 @@
     <entry file="file://$PROJECT_DIR$/src/ui/contacts.form">
       <provider selected="true" editor-type-id="ui-designer" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/ui/contacts.java">
+    <entry file="file://$PROJECT_DIR$/src/ui/csvDiag.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="344">
-          <caret line="175" column="38" selection-start-line="175" selection-start-column="38" selection-end-line="175" selection-end-column="38" />
+        <state relative-caret-position="60">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding>
+            <element signature="initializer##0;class#csvDiag#0" expanded="true" />
+            <element signature="initializer##0;class#csvDiag#0" expanded="true" />
+            <element signature="e#4223#4224#0" expanded="true" />
+            <element signature="e#4257#4258#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/utils/csvUtil.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-200">
+          <caret line="31" column="24" lean-forward="true" selection-start-line="31" selection-start-column="24" selection-end-line="31" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3212#4076#0" expanded="true" />
-            <element signature="e#4075#4076#0" expanded="true" />
-            <element signature="e#4115#4849#0" expanded="true" />
-            <element signature="e#4848#4849#0" expanded="true" />
-            <element signature="e#4891#5291#0" expanded="true" />
-            <element signature="e#5290#5291#0" expanded="true" />
-            <element signature="e#5336#5579#0" expanded="true" />
-            <element signature="e#5578#5579#0" expanded="true" />
-            <element signature="e#5617#5886#0" expanded="true" />
-            <element signature="e#5885#5886#0" expanded="true" />
-            <element signature="initializer##0;class#contacts#0" expanded="true" />
-            <element signature="initializer##0;class#contacts#0" expanded="true" />
           </folding>
         </state>
       </provider>

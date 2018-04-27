@@ -66,6 +66,9 @@ public class contacts {
     private JTable infoTable;
     private JScrollPane userInfoPane;
 
+    //constants
+    private int columnCount = 9;
+
 
     //status variables;
     public int selectedRowIdx = 0; //selected row index in catalogue
@@ -105,6 +108,69 @@ public class contacts {
             public void valueChanged(ListSelectionEvent e) {
                 selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
                 //  idTextField.setText(infoModel.getValueAt(selectedRowIdx, 0).toString());
+
+                if (selectedRowIdx != -1) {
+                    String row[] = new String[columnCount];
+                    Integer classInt = new Integer(5);
+
+                    for (int i = 0; i < columnCount; i++) {
+                        row[i] = (catalogue.getValueAt(selectedRowIdx, i) == null) ? "" : (catalogue.getValueAt(selectedRowIdx, i).toString());
+                    }
+
+
+                    // setting TEXTFIELD texts
+                    idTextField.setText(row[0]);
+                    nameTextField.setText(row[1]);
+                    switch (row[2]) {
+                        case "数据挖掘":
+                            groupBox.setSelectedIndex(0);
+                            break;
+                        case "嵌入式":
+                            groupBox.setSelectedIndex(1);
+                            break;
+                        case "前端":
+                            groupBox.setSelectedIndex(2);
+                            break;
+                        case "后端":
+                            groupBox.setSelectedIndex(3);
+                            break;
+                        case "手游":
+                            groupBox.setSelectedIndex(4);
+                            break;
+                        case "设计":
+                            groupBox.setSelectedIndex(5);
+                            break;
+                        default:
+                            groupBox.setSelectedIndex(0);
+                            break;
+                    }
+
+                    switch (row[3]) {
+                        case "大一":
+                            gradeBox.setSelectedIndex(0);
+                            break;
+                        case "大二":
+                            gradeBox.setSelectedIndex(1);
+                            break;
+                        case "大三":
+                            gradeBox.setSelectedIndex(2);
+                            break;
+                        case "大四":
+                            gradeBox.setSelectedIndex(3);
+                            break;
+                        default:
+                            gradeBox.setSelectedIndex(0);
+                            break;
+                    }
+                    ;
+
+                    clasBox.setSelectedIndex((row[4] == "") ? 0 : (Integer.parseInt(row[4]) - 1));
+                    teleNumTextField.setText(row[5]);
+                    emailTextField.setText(row[6]);
+                    dormTextField.setText(row[7]);
+                    addrTextField.setText(row[8]);
+
+                }
             }
         });
 
@@ -137,8 +203,8 @@ public class contacts {
 
                 deletStack.enIndex(selectedRowIdx);
 
-                String[] row = new String[9];
-                for (int i = 0; i < 9; i++) {
+                String[] row = new String[columnCount];
+                for (int i = 0; i < columnCount; i++) {
                     row[i] = (catalogue.getValueAt(selectedRowIdx, i)).toString();
                     System.out.println((catalogue.getValueAt(selectedRowIdx, i)).toString());
                 }
@@ -176,6 +242,8 @@ public class contacts {
                 csvMaker.tabletoCSV();
 
             }
+        });
+        contentsScrollPane.addFocusListener(new FocusAdapter() {
         });
     }
 
@@ -266,8 +334,8 @@ public class contacts {
         contactTable.add(contentsScrollPane, BorderLayout.CENTER);
         catalogue = new JTable();
         catalogue.setGridColor(new Color(-16777216));
-        catalogue.setSelectionBackground(new Color(-1));
-        catalogue.setSelectionForeground(new Color(-1250068));
+        catalogue.setSelectionBackground(new Color(-12871172));
+        catalogue.setSelectionForeground(new Color(-12871172));
         catalogue.setShowHorizontalLines(true);
         catalogue.setVisible(true);
         contentsScrollPane.setViewportView(catalogue);

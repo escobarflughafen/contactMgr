@@ -75,6 +75,21 @@ public class csvUtil {
     }
 
     public void CSVtoTable(){
+        try{
+            File csv = new File("./csv/"+csvFileName);
+            if(!csv.exists())
+            {
+                System.out.println("csv file doesn't exists");
+            } else {
+                BufferedReader in = new BufferedReader(new FileReader(csv));
+                for(int i = 0; i < in.lines().toArray().length; i++){
+                  //  tableToRecord.getModel(). = in.readLine();
+                }
+            }
 
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

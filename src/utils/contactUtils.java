@@ -29,21 +29,11 @@ public class contactUtils {
     }
 
     public void setUserInfo(DefaultTableModel model){
-        Vector <String> items = new Vector<>();
-        Vector <String> values = new Vector<>();
-        Vector <String> complex = new Vector<>();
-        items.add("用户名");
-        values.add(this.username);
-        items.add("密码");
-        values.add("123456");
-        //model.insertRow(0,items.get(0),values.get(0));
-        for(int i = 0; i < items.size(); i++){
-            complex.add(items.get(i));
-            complex.add(values.get(i));
-            model.insertRow(i,complex);
-            complex.remove(0);
-            complex.remove(0);
-        }
+
+    }
+
+    public void contactDataReload(){
+
     }
 
 }

@@ -113,4 +113,16 @@ public class member{
                                 getDormitory(),getAddress()};
         model.addRow(rowData);
     }
+
+    public String toString(){
+           return ( "ID: " + id +
+                    "Name: " + name +
+                    "Group: " + group +
+                    "Grade: " + grade +
+                    "Class: " + clas +
+                    "Phone: " + phoneNum +
+                    "Email: " + email +
+                    "Dormitory: " + dormitory +
+                    "Address:" + address);
+    }
 }
