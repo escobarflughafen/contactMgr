@@ -79,7 +79,7 @@ public class contacts {
 
     //revoking stack
     public revokeStack deletStack = new revokeStack();
-    public contactUtils infoCreater = new contactUtils();
+    public contactUtils contactBuilder = new contactUtils();
 
 
     String colHeaders[] = {"ID", "姓名", "方向", "年级", "班级", "电话", "电邮", "宿舍", "住址"};
@@ -92,8 +92,8 @@ public class contacts {
         this.username = username;
         catalogue.setModel(infoModel);
         infoTable.setModel(userInfoModel);
-        infoCreater.setUsername(username);
-        infoCreater.setUserInfo(userInfoModel);
+        contactBuilder.setUsername(username);
+        contactBuilder.setUserInfo(userInfoModel);
 
         JFrame frame = new JFrame("contacts");
         frame.setContentPane(panel1);
@@ -121,6 +121,7 @@ public class contacts {
                     // setting TEXTFIELD texts
                     idTextField.setText(row[0]);
                     nameTextField.setText(row[1]);
+
                     switch (row[2]) {
                         case "数据挖掘":
                             groupBox.setSelectedIndex(0);
@@ -186,10 +187,13 @@ public class contacts {
                             teleNumTextField.getText(), emailTextField.getText(),
                             dormTextField.getText(), addrTextField.getText());
 
+                    /*
                     int tempRowIndex = selectedRowIdx;
                     infoModel.removeRow(tempRowIndex);
                     infoModel.insertRow(tempRowIndex, memInfo.getRecord());
+                    */
 
+                    contactBuilder.saveRow(catalogue, selectedRowIdx, infoModel, memInfo);
 
                     isSaved = false;
                 }
@@ -200,9 +204,12 @@ public class contacts {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                int deletRowIndex = selectedRowIdx;
                 //revokRow = {idTextField.getText(),nameTextField.getText(),groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),}
+                contactBuilder.deleteRow(catalogue, deletRowIndex, infoModel, deletStack);
+                System.out.println(deletStack.toString());
 
-                if (selectedRowIdx >= 0) {
+            /*    if (selectedRowIdx >= 0) {
 
                     deletStack.enIndex(selectedRowIdx);
                     String[] row = new String[columnCount];
@@ -214,8 +221,9 @@ public class contacts {
                     deletStack.enDelet(row);//
                     infoModel.removeRow(selectedRowIdx);
 
-                }
+                }*/
             }
+
 
         });
 
@@ -223,9 +231,12 @@ public class contacts {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+                /*
                 String[] emptyRow = {""};
                 infoModel.insertRow((selectedRowIdx == 0 && rowCount == 0) ? selectedRowIdx : selectedRowIdx + 1, emptyRow); // 插入空表：插入非空表
                 rowCount++;
+                */
+                contactBuilder.createNewRow(catalogue, selectedRowIdx, infoModel);
                 isSaved = false;
             }
         });
@@ -234,9 +245,8 @@ public class contacts {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
-                if (selectedRowIdx >= 0) {
-                    infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
-                }
+                //infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
+                contactBuilder.revokeDeletRow(catalogue, infoModel, deletStack);
             }
         });
         ex2csvBtn.addMouseListener(new MouseAdapter() {

@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import utils.revokeStack;
 
 
 
@@ -34,6 +35,40 @@ public class contactUtils {
 
     public void contactDataReload(){
 
+    }
+
+    public void deleteRow(JTable table, int rowIndex , DefaultTableModel model,revokeStack revokStack){
+        if (rowIndex >= 0){
+            revokStack.enIndex(rowIndex);
+            String[] row = new String [table.getColumnCount()];
+            for(int i = 0; i< table.getColumnCount() ; i++){
+                row[i] = (table.getValueAt(rowIndex, i) == null) ? "" : table.getValueAt(rowIndex, i).toString();
+                System.out.println(row[i]);
+            }
+
+            revokStack.enDelet(row);
+            model.removeRow(rowIndex);
+
+        }
+    }
+
+    public void revokeDeletRow(JTable table, DefaultTableModel model, revokeStack revokStack){
+        model.insertRow(revokStack.popIndex(),revokStack.popRevoke());
+    }
+
+
+    public void saveRow(JTable table, int rowIndex, DefaultTableModel model,member memInfo){
+
+            int tempRowIndex = rowIndex;
+            model.removeRow(tempRowIndex);
+            model.insertRow(tempRowIndex, memInfo.toArray());
+
+
+    }
+
+    public void createNewRow(JTable table, int rowIndex, DefaultTableModel model){
+        String[] emptyRow = {""};
+        model.insertRow((rowIndex == 0 && table.getRowCount() == 0) ? rowIndex : rowIndex + 1, emptyRow); // 插入空表：插入非空表
     }
 
 }

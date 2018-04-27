@@ -2,6 +2,7 @@ package utils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.EmptyStackException;
 import java.util.Stack;
 
 public class revokeStack {
@@ -17,13 +18,20 @@ public class revokeStack {
         revokStack.push(row);
     }
 
-    public int popIndex(){
-        return indexStack.pop();
+    public int popIndex() {
+        if(!indexStack.isEmpty()){
+            return indexStack.pop();
+        } else {
+            return -1;
+        }
     }
 
     public String[] popRevoke(){
-        return revokStack.pop();
+        if(!revokStack.isEmpty()){
+            return revokStack.pop();
+        } else {
+            return null;
+        }
     }
-
 
 }

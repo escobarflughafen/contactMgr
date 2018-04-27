@@ -125,4 +125,11 @@ public class member{
                     "Dormitory: " + dormitory +
                     "Address:" + address);
     }
+
+    public String[] toArray(){
+
+        String[] array = {getId(),getName(),getGroup(),getGrade(),getClas(),getPhoneNum(),getEmail(),getDormitory(),getAddress()};
+
+        return array;
+    }
 }
