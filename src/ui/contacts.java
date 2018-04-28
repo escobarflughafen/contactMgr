@@ -9,7 +9,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.IOException;
+import java.util.Vector;
 
 import utils.revokeStack;
 import utils.csvUtil;
@@ -21,7 +21,7 @@ public class contacts {
     private JTextField searchTextField;
     private JButton btnGo;
     private JPanel modifyPane;
-    private JTabbedPane tabbedPane1;
+    private JTabbedPane modifyTabbedPane;
     private JButton saveBtn;
     private JButton createNewBtn;
     private JTextField nameTextField;
@@ -65,16 +65,22 @@ public class contacts {
     private JPanel btnPane2;
     private JTable infoTable;
     private JScrollPane userInfoPane;
+    private JLabel editStatusLbl;
+    private JPanel catalogContainer;
+    private JList searchResultList;
+    private JPanel searchPane;
 
     //constants
     private int columnCount = 9;
 
 
     //status variables;
-    public int selectedRowIdx = 0; //selected row index in catalogue
+    public int selectedRowIdx = -1; //selected row index in catalogue
+    public int selectedColumnIdx = -1;
     public boolean isSaved = true;    //records whether the data is modified after saving or not
     private int rowCount = 0;
     private String username;
+    private Vector<member> contacts;
 
 
     //revoking stack
@@ -95,6 +101,12 @@ public class contacts {
         contactBuilder.setUsername(username);
         contactBuilder.setUserInfo(userInfoModel);
 
+        searchPane.setVisible(false);
+        searchResultList.remove(0);
+
+
+        contacts = contactBuilder.createAllContactObjects(catalogue);
+
         JFrame frame = new JFrame("contacts");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -106,7 +118,14 @@ public class contacts {
         catalogue.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
+             /*   selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
+                selectedColumnIdx = catalogue.getSelectedColumn();
+
+                editStatusLbl.setText(String.valueOf(selectedRowIdx) + ", " + String.valueOf(selectedColumnIdx)); */
                 selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
+                selectedColumnIdx = catalogue.getSelectedColumn();
+
+
                 //  idTextField.setText(infoModel.getValueAt(selectedRowIdx, 0).toString());
 
                 if (selectedRowIdx >= 0) {
@@ -180,13 +199,17 @@ public class contacts {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (selectedRowIdx >= 0) {
-                    member memInfo = new member(idTextField.getText(), nameTextField.getText(),
-                            groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
-                            gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
-                            clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
-                            teleNumTextField.getText(), emailTextField.getText(),
-                            dormTextField.getText(), addrTextField.getText());
+                    member memInfo = new member();
 
+                    memInfo.setId(idTextField.getText());
+                    memInfo.setName(nameTextField.getText());
+                    memInfo.setGroup(groupBox.getItemAt(groupBox.getSelectedIndex()).toString());
+                    memInfo.setGrade(gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString());
+                    memInfo.setClas(clasBox.getItemAt(clasBox.getSelectedIndex()).toString());
+                    memInfo.setPhoneNum(teleNumTextField.getText());
+                    memInfo.setEmail(emailTextField.getText());
+                    memInfo.setDormitory(dormTextField.getText());
+                    memInfo.setAddress(addrTextField.getText());
                     /*
                     int tempRowIndex = selectedRowIdx;
                     infoModel.removeRow(tempRowIndex);
@@ -202,8 +225,8 @@ public class contacts {
 
         deleteBtn.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
                 int deletRowIndex = selectedRowIdx;
                 //revokRow = {idTextField.getText(),nameTextField.getText(),groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),}
                 contactBuilder.deleteRow(catalogue, deletRowIndex, infoModel, deletStack);
@@ -229,8 +252,8 @@ public class contacts {
 
         createNewBtn.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
                 /*
                 String[] emptyRow = {""};
                 infoModel.insertRow((selectedRowIdx == 0 && rowCount == 0) ? selectedRowIdx : selectedRowIdx + 1, emptyRow); // 插入空表：插入非空表
@@ -243,22 +266,113 @@ public class contacts {
 
         revokeDeleteBtn.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
                 //infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
                 contactBuilder.revokeDeletRow(catalogue, infoModel, deletStack);
+
             }
         });
         ex2csvBtn.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
                 csvUtil csvMaker = new csvUtil("t01.csv", catalogue);
                 csvMaker.tabletoCSV();
 
             }
         });
-        contentsScrollPane.addFocusListener(new FocusAdapter() {
+
+
+        catalogue.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                // selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
+                //   selectedColumnIdx = catalogue.getSelectedColumn();
+
+                //   editStatusLbl.setText(String.valueOf(selectedRowIdx) + ", " + String.valueOf(selectedColumnIdx));
+            }
+        });
+
+
+        catalogue.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
+                selectedColumnIdx = catalogue.getSelectedColumn();
+
+                editStatusLbl.setText(String.valueOf(selectedRowIdx) + ", " + String.valueOf(selectedColumnIdx));
+                contacts = contactBuilder.createAllContactObjects(catalogue);
+            }
+        });
+
+        saveBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                if (selectedRowIdx >= 0) {
+                    member memInfo = new member();
+
+                    memInfo.setId(idTextField.getText());
+                    memInfo.setName(nameTextField.getText());
+                    memInfo.setGroup(groupBox.getItemAt(groupBox.getSelectedIndex()).toString());
+                    memInfo.setGrade(gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString());
+                    memInfo.setClas(clasBox.getItemAt(clasBox.getSelectedIndex()).toString());
+                    memInfo.setPhoneNum(teleNumTextField.getText());
+                    memInfo.setEmail(emailTextField.getText());
+                    memInfo.setDormitory(dormTextField.getText());
+                    memInfo.setAddress(addrTextField.getText());
+
+
+                    contactBuilder.saveRow(catalogue, selectedRowIdx, infoModel, memInfo);
+                    contacts.insertElementAt(contactBuilder.readRowToMember(catalogue, selectedRowIdx), selectedRowIdx);
+
+                    isSaved = false;
+                }
+            }
+        });
+        searchTextField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+
+            }
+        });
+        searchTextField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+                //   searchPane.setVisible(false);
+            }
+        });
+        searchTextField.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                searchPane.setVisible(true);
+            }
+        });
+        searchResultList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                super.mouseExited(e);
+
+            }
+        });
+        searchResultList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                super.mouseReleased(e);
+                searchPane.setVisible(false);
+            }
+        });
+        btnGo.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                //searching
+            }
         });
     }
 
@@ -343,22 +457,46 @@ public class contacts {
         revokeDeleteBtn.setText("撤销删除");
         revokeDeleteBtn.setVisible(true);
         btnPane.add(revokeDeleteBtn);
+        editStatusLbl = new JLabel();
+        editStatusLbl.setText("");
+        btnPane.add(editStatusLbl);
+        searchPane = new JPanel();
+        searchPane.setLayout(new BorderLayout(0, 0));
+        searchPane.setVisible(true);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.BOTH;
+        modifyPane.add(searchPane, gbc);
+        searchPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-16777216)), null));
+        searchResultList = new JList();
+        final DefaultListModel defaultListModel1 = new DefaultListModel();
+        defaultListModel1.addElement("3117004478");
+        searchResultList.setModel(defaultListModel1);
+        searchResultList.setVisible(true);
+        searchPane.add(searchResultList, BorderLayout.CENTER);
+        catalogContainer = new JPanel();
+        catalogContainer.setLayout(new CardLayout(0, 0));
+        contactTable.add(catalogContainer, BorderLayout.CENTER);
         contentsScrollPane = new JScrollPane();
         Font contentsScrollPaneFont = this.$$$getFont$$$(null, -1, 16, contentsScrollPane.getFont());
         if (contentsScrollPaneFont != null) contentsScrollPane.setFont(contentsScrollPaneFont);
-        contactTable.add(contentsScrollPane, BorderLayout.CENTER);
+        contentsScrollPane.putClientProperty("html.disable", Boolean.FALSE);
+        catalogContainer.add(contentsScrollPane, "Card1");
         catalogue = new JTable();
         catalogue.setGridColor(new Color(-16777216));
-        catalogue.setSelectionBackground(new Color(-1));
-        catalogue.setSelectionForeground(new Color(-12871172));
+        catalogue.setSelectionBackground(new Color(-13221020));
+        catalogue.setSelectionForeground(new Color(-1));
         catalogue.setShowHorizontalLines(true);
+        catalogue.setShowVerticalLines(true);
         catalogue.setVisible(true);
+        catalogue.putClientProperty("JTable.autoStartsEdit", Boolean.FALSE);
         contentsScrollPane.setViewportView(catalogue);
-        tabbedPane1 = new JTabbedPane();
-        mainSplit.setRightComponent(tabbedPane1);
+        modifyTabbedPane = new JTabbedPane();
+        mainSplit.setRightComponent(modifyTabbedPane);
         toModifyPanel = new JPanel();
         toModifyPanel.setLayout(new BorderLayout(0, 0));
-        tabbedPane1.addTab("修改", toModifyPanel);
+        modifyTabbedPane.addTab("修改", toModifyPanel);
         checkPanel = new JPanel();
         checkPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         toModifyPanel.add(checkPanel, BorderLayout.NORTH);
@@ -569,7 +707,7 @@ public class contacts {
         detailPanel.add(clasBox, gbc);
         userPane = new JPanel();
         userPane.setLayout(new BorderLayout(0, 0));
-        tabbedPane1.addTab("用户", userPane);
+        modifyTabbedPane.addTab("用户", userPane);
         btnPane2 = new JPanel();
         btnPane2.setLayout(new BorderLayout(0, 0));
         userPane.add(btnPane2, BorderLayout.SOUTH);

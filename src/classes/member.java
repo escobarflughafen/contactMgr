@@ -17,7 +17,8 @@ public class member{
     private String dormitory;
     private String address;
 
-    public member(String id,String name,String group,String grade,String clas,String phoneNum,String email,String dormitory,String address){
+    public member(){//String id,String name,String group,String grade,String clas,String phoneNum,String email,String dormitory,String address){
+        /*
         setId(id);
         setName(name);
         setAddress(address);
@@ -27,6 +28,7 @@ public class member{
         setGroup(group);
         setPhoneNum(phoneNum);
         setGrade(grade);
+        */
     }
 
 

@@ -100,7 +100,7 @@ public class csvDiag extends JDialog {
         buttonCancel.setText("Cancel");
         panel2.add(buttonCancel, new com.intellij.uiDesigner.core.GridConstraints(0, 1, 1, 1, com.intellij.uiDesigner.core.GridConstraints.ANCHOR_CENTER, com.intellij.uiDesigner.core.GridConstraints.FILL_HORIZONTAL, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_SHRINK | com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_CAN_GROW, com.intellij.uiDesigner.core.GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JPanel panel3 = new JPanel();
-        panel3.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+        panel3.setLayout(new BorderLayout(0, 0));
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -108,6 +108,8 @@ public class csvDiag extends JDialog {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.BOTH;
         contentPane.add(panel3, gbc);
+        final JScrollPane scrollPane1 = new JScrollPane();
+        panel3.add(scrollPane1, BorderLayout.CENTER);
     }
 
     /**

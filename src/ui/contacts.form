@@ -91,32 +91,77 @@
                               <visible value="true"/>
                             </properties>
                           </component>
+                          <component id="89604" class="javax.swing.JLabel" binding="editStatusLbl">
+                            <constraints/>
+                            <properties>
+                              <text value=""/>
+                            </properties>
+                          </component>
+                        </children>
+                      </grid>
+                      <grid id="78bd9" binding="searchPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+                        <constraints>
+                          <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <visible value="true"/>
+                        </properties>
+                        <border type="line">
+                          <color color="-16777216"/>
+                        </border>
+                        <children>
+                          <component id="79cb6" class="javax.swing.JList" binding="searchResultList">
+                            <constraints border-constraint="Center"/>
+                            <properties>
+                              <model>
+                                <item value="3117004478"/>
+                              </model>
+                              <visible value="true"/>
+                            </properties>
+                          </component>
                         </children>
                       </grid>
                     </children>
                   </grid>
-                  <scrollpane id="b8548" binding="contentsScrollPane">
+                  <grid id="b1abc" binding="catalogContainer" layout-manager="CardLayout" hgap="0" vgap="0">
                     <constraints border-constraint="Center"/>
-                    <properties>
-                      <font size="16"/>
-                    </properties>
+                    <properties/>
                     <border type="none"/>
                     <children>
-                      <component id="bbe6f" class="javax.swing.JTable" binding="catalogue">
-                        <constraints/>
+                      <scrollpane id="b8548" binding="contentsScrollPane">
+                        <constraints>
+                          <card name="Card1"/>
+                        </constraints>
                         <properties>
-                          <gridColor color="-16777216"/>
-                          <selectionBackground color="-1"/>
-                          <selectionForeground color="-12871172"/>
-                          <showHorizontalLines value="true"/>
-                          <visible value="true"/>
+                          <font size="16"/>
                         </properties>
-                      </component>
+                        <clientProperties>
+                          <html.disable class="java.lang.Boolean" value="false"/>
+                        </clientProperties>
+                        <border type="none"/>
+                        <children>
+                          <component id="bbe6f" class="javax.swing.JTable" binding="catalogue">
+                            <constraints/>
+                            <properties>
+                              <gridColor color="-16777216"/>
+                              <selectionBackground color="-13221020"/>
+                              <selectionForeground color="-1"/>
+                              <showHorizontalLines value="true"/>
+                              <showVerticalLines value="true"/>
+                              <visible value="true"/>
+                            </properties>
+                            <clientProperties>
+                              <JTable.autoStartsEdit class="java.lang.Boolean" value="false"/>
+                            </clientProperties>
+                          </component>
+                        </children>
+                      </scrollpane>
                     </children>
-                  </scrollpane>
+                  </grid>
                 </children>
               </grid>
-              <tabbedpane id="f1f66" binding="tabbedPane1" default-binding="true">
+              <tabbedpane id="f1f66" binding="modifyTabbedPane">
                 <constraints>
                   <splitpane position="right"/>
                 </constraints>
