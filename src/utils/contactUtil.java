@@ -10,42 +10,22 @@ import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import utils.revokeStack;
+import java.util.regex.*;
 
 
 
-public class contactUtils {
+public class contactUtil {
     // use stack to save deleted rows
     private String database;
     private String username;
 
-    static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    static final String DB_URL = "jdbc:mysql://localhost:3306/contacts";
-
-    private static final String USERNAME = "root";
-    private static final String PASSWORD = "root";
-
-    private Connection  conn;
-    private Statement   stmt;
-
-    public contactUtils(){
 
 
-        try {
-            Class.forName(JDBC_DRIVER);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+    public contactUtil(){
+
 
     }
 
-    public Connection getConn(){
-        try{
-            conn = DriverManager.getConnection(DB_URL,USERNAME,PASSWORD);
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-        return conn;
-    }
 
     public String getOne(){
         System.out.println();
@@ -109,8 +89,8 @@ public class contactUtils {
     public member readRowToMember(JTable table, int rowIndex){
         member ret = new member();
         ret.setId(obj2str(table.getValueAt(rowIndex,0)));
-        ret.setName(obj2str(table.getValueAt(rowIndex,1) != null));
-        ret.setGroup(obj2str(table.getValueAt(rowIndex,2) != null));
+        ret.setName(obj2str(table.getValueAt(rowIndex,1)));
+        ret.setGroup(obj2str(table.getValueAt(rowIndex,2)));
         ret.setGrade(obj2str(table.getValueAt(rowIndex,3)));
         ret.setClas(obj2str(table.getValueAt(rowIndex,4)));
         ret.setPhoneNum(obj2str(table.getValueAt(rowIndex,5)));
@@ -128,7 +108,28 @@ public class contactUtils {
         return ret;
     }
 
-    public void contactSearch(){
+    public void contactSearch(String searchAttempt, Vector<member> contacts, Vector<String> searchResult, Vector<Integer> searchResultIndex, JList list){
+        String rPattern = ".*" + searchAttempt + ".*";
+
+        boolean isMatch = false;
+
+        for(int i = 0; i < contacts.size(); i++){
+           /* isMatch = Pattern.matches(rPattern,contactsArray[i]);
+            if(isMatch){
+                list.setListData();
+            } */
+           isMatch = Pattern.matches(rPattern,contacts.get(i).toString());
+           if(isMatch){
+               searchResult.add(contacts.get(i).toString());
+               searchResultIndex.add(i);
+           }
+
+        }
+
+        list.setListData(searchResult);
+
+
+
 
     }
 

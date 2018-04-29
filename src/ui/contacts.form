@@ -68,6 +68,7 @@
                         </constraints>
                         <properties>
                           <text value="Go"/>
+                          <visible value="true"/>
                         </properties>
                       </component>
                       <grid id="6827c" binding="btnPane" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
@@ -471,12 +472,6 @@
           <title-color color="-16777216"/>
         </border>
         <children>
-          <component id="84c9c" class="javax.swing.JButton" binding="searchByCondBtn">
-            <constraints/>
-            <properties>
-              <text value="条件查询"/>
-            </properties>
-          </component>
           <component id="c0f67" class="javax.swing.JButton" binding="statBtn">
             <constraints/>
             <properties>

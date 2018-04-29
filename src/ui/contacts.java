@@ -9,11 +9,12 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeListener;
 import java.util.Vector;
 
 import utils.revokeStack;
 import utils.csvUtil;
-import utils.contactUtils;
+import utils.contactUtil;
 
 public class contacts {
 
@@ -56,7 +57,6 @@ public class contacts {
     private JComboBox gradeBox;
     private JComboBox clasBox;
     private JScrollPane contentsScrollPane;
-    private JButton searchByCondBtn;
     private JButton savBtn;
     private JButton revokeDeleteBtn;
     private JPanel btnPane;
@@ -81,11 +81,13 @@ public class contacts {
     private int rowCount = 0;
     private String username;
     private Vector<member> contacts;
+    private Vector<String> searchResult = new Vector<>();
+    private Vector<Integer> searchResultIndex = new Vector<>();
 
 
     //revoking stack
     public revokeStack deletStack = new revokeStack();
-    public contactUtils contactBuilder = new contactUtils();
+    public contactUtil contactBuilder = new contactUtil();
 
 
     String colHeaders[] = {"ID", "姓名", "方向", "年级", "班级", "电话", "电邮", "宿舍", "住址"};
@@ -327,30 +329,22 @@ public class contacts {
 
 
                     contactBuilder.saveRow(catalogue, selectedRowIdx, infoModel, memInfo);
-                    contacts.insertElementAt(contactBuilder.readRowToMember(catalogue, selectedRowIdx), selectedRowIdx);
+
+                    contacts = contactBuilder.createAllContactObjects(catalogue);
 
                     isSaved = false;
                 }
             }
         });
-        searchTextField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
 
-            }
-        });
-        searchTextField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
-                //   searchPane.setVisible(false);
-            }
-        });
+
         searchTextField.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 searchPane.setVisible(true);
+                contacts = contactBuilder.createAllContactObjects(catalogue);
+
             }
         });
         searchResultList.addMouseListener(new MouseAdapter() {
@@ -364,6 +358,11 @@ public class contacts {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
+                int index = searchResultIndex.get(searchResultList.getSelectedIndex());
+                catalogue.setRowSelectionInterval(index, index);
+                searchResultList.removeAll();
+                searchResult.removeAllElements();
+                searchResultIndex.removeAllElements();
                 searchPane.setVisible(false);
             }
         });
@@ -371,7 +370,18 @@ public class contacts {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
+
                 //searching
+                contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
+
+            }
+        });
+
+
+        searchTextField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
             }
         });
     }
@@ -438,6 +448,7 @@ public class contacts {
         modifyPane.add(searchTextField, gbc);
         btnGo = new JButton();
         btnGo.setText("Go");
+        btnGo.setVisible(true);
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;

@@ -117,15 +117,15 @@ public class member{
     }
 
     public String toString(){
-           return ( "ID: " + id +
-                    "Name: " + name +
-                    "Group: " + group +
-                    "Grade: " + grade +
-                    "Class: " + clas +
-                    "Phone: " + phoneNum +
-                    "Email: " + email +
-                    "Dormitory: " + dormitory +
-                    "Address:" + address);
+           return (  id +
+                    "," + name +
+                    "," + group +
+                    "," + grade +
+                    "," + clas +
+                    "," + phoneNum +
+                    "," + email +
+                    "," + dormitory +
+                    "," + address);
     }
 
     public String[] toArray(){
