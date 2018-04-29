@@ -4,18 +4,14 @@ import classes.member;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.TreeModel;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Vector;
 
-import org.omg.CORBA.INTERNAL;
 import utils.revokeStack;
 import utils.csvUtil;
 import utils.contactUtil;
@@ -41,7 +37,6 @@ public class contacts {
     private JSpinner clsSpin;
     private JComboBox groupBox;
     private JButton deleteBtn;
-    private JButton statBtn;
     private JButton ex2csvBtn;
     private JPanel ctrlPanel;
     private JPanel tabBasePanel;
@@ -74,6 +69,12 @@ public class contacts {
     private JList searchResultList;
     private JPanel searchPane;
     private JSpinner catalogTextSizeSpin;
+    private JLabel searchStatLbl;
+    private JTree tableTree;
+    private JPanel bottomPane;
+    private JPanel StatPane;
+    private JLabel tableCountLbl;
+    private JLabel contactCountLbl;
 
     //constants
     private int columnCount = 9;
@@ -111,6 +112,7 @@ public class contacts {
 
 
         searchPane.setVisible(false);
+        searchStatLbl.setVisible(false);
         searchResultList.remove(0);
 
 
@@ -133,6 +135,7 @@ public class contacts {
                 searchResultIndex.removeAllElements();
                 //searching
                 contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
+                searchStatLbl.setText("共 " + String.valueOf(searchResult.size()) + " 项结果");
 
             }
 
@@ -143,7 +146,7 @@ public class contacts {
                 searchResultIndex.removeAllElements();
                 //searching
                 contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
-
+                searchStatLbl.setText("共 " + String.valueOf(searchResult.size()) + " 项结果");
             }
 
             @Override
@@ -153,6 +156,7 @@ public class contacts {
                 searchResultIndex.removeAllElements();
                 //searching
                 contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
+                searchStatLbl.setText("共 " + String.valueOf(searchResult.size()) + " 项结果");
 
             }
         });
@@ -262,6 +266,10 @@ public class contacts {
 
                     contactBuilder.saveRow(catalogue, selectedRowIdx, infoModel, memInfo);
 
+                    contacts = contacts = contactBuilder.createAllContactObjects(catalogue);
+                    contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+
+
                     isSaved = false;
                 }
             }
@@ -274,6 +282,8 @@ public class contacts {
                 int deletRowIndex = selectedRowIdx;
                 //revokRow = {idTextField.getText(),nameTextField.getText(),groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),}
                 contactBuilder.deleteRow(catalogue, deletRowIndex, infoModel, deletStack);
+                contacts = contactBuilder.createAllContactObjects(catalogue);
+                contactCountLbl.setText("共 " + contacts.size() + " 条记录");
                 System.out.println(deletStack.toString());
 
             /*    if (selectedRowIdx >= 0) {
@@ -304,7 +314,10 @@ public class contacts {
                 rowCount++;
                 */
                 contactBuilder.createNewRow(catalogue, selectedRowIdx, infoModel);
+                contacts = contactBuilder.createAllContactObjects(catalogue);
+                contactCountLbl.setText("共 " + contacts.size() + " 条记录");
                 isSaved = false;
+
             }
         });
 
@@ -314,6 +327,8 @@ public class contacts {
                 super.mousePressed(e);
                 //infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
                 contactBuilder.revokeDeletRow(catalogue, infoModel, deletStack);
+                contacts = contactBuilder.createAllContactObjects(catalogue);
+                contactCountLbl.setText("共 " + contacts.size() + " 条记录");
 
             }
         });
@@ -385,6 +400,7 @@ public class contacts {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 searchPane.setVisible(true);
+                searchStatLbl.setVisible(true);
                 contacts = contactBuilder.createAllContactObjects(catalogue);
 
             }
@@ -406,17 +422,7 @@ public class contacts {
                 searchResult.removeAllElements();
                 searchResultIndex.removeAllElements();
                 searchPane.setVisible(false);
-            }
-        });
-        btnGo.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                searchResult.removeAllElements();
-                searchResultIndex.removeAllElements();
-                //searching
-                contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
-
+                searchStatLbl.setVisible(false);
             }
         });
 
@@ -497,19 +503,10 @@ public class contacts {
         gbc.weighty = 1.0;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         modifyPane.add(searchTextField, gbc);
-        btnGo = new JButton();
-        btnGo.setText("Go");
-        btnGo.setVisible(true);
-        gbc = new GridBagConstraints();
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weighty = 1.0;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        modifyPane.add(btnGo, gbc);
         btnPane = new JPanel();
         btnPane.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         gbc = new GridBagConstraints();
-        gbc.gridx = 2;
+        gbc.gridx = 1;
         gbc.gridy = 0;
         modifyPane.add(btnPane, gbc);
         deleteBtn = new JButton();
@@ -540,6 +537,13 @@ public class contacts {
         searchResultList.setModel(defaultListModel1);
         searchResultList.setVisible(true);
         searchPane.add(searchResultList, BorderLayout.CENTER);
+        searchStatLbl = new JLabel();
+        searchStatLbl.setText("stats");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        modifyPane.add(searchStatLbl, gbc);
         catalogContainer = new JPanel();
         catalogContainer.setLayout(new CardLayout(0, 0));
         contactTable.add(catalogContainer, BorderLayout.CENTER);
@@ -785,18 +789,37 @@ public class contacts {
         infoTable = new JTable();
         infoTable.setSelectionForeground(new Color(-1250068));
         userInfoPane.setViewportView(infoTable);
+        tableTree = new JTree();
+        panel1.add(tableTree, BorderLayout.WEST);
+        bottomPane = new JPanel();
+        bottomPane.setLayout(new BorderLayout(0, 0));
+        panel1.add(bottomPane, BorderLayout.SOUTH);
         ctrlPanel = new JPanel();
         ctrlPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        panel1.add(ctrlPanel, BorderLayout.SOUTH);
-        statBtn = new JButton();
-        statBtn.setText("统计信息");
-        ctrlPanel.add(statBtn);
+        bottomPane.add(ctrlPanel, BorderLayout.EAST);
         ex2csvBtn = new JButton();
         ex2csvBtn.setText("输出 CSV");
         ctrlPanel.add(ex2csvBtn);
         savBtn = new JButton();
         savBtn.setText("保存通讯录");
         ctrlPanel.add(savBtn);
+        StatPane = new JPanel();
+        StatPane.setLayout(new GridBagLayout());
+        bottomPane.add(StatPane, BorderLayout.WEST);
+        tableCountLbl = new JLabel();
+        tableCountLbl.setText("TABLECOUNT");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        StatPane.add(tableCountLbl, gbc);
+        contactCountLbl = new JLabel();
+        contactCountLbl.setText("CONTACTCOUNT");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.anchor = GridBagConstraints.EAST;
+        StatPane.add(contactCountLbl, gbc);
     }
 
     /**

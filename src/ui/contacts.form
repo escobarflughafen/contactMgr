@@ -119,6 +119,15 @@
                           </component>
                         </children>
                       </grid>
+                      <component id="58b6f" class="javax.swing.JLabel" binding="searchStatLbl">
+                        <constraints>
+                          <grid row="1" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                          <gridbag weightx="0.0" weighty="0.0"/>
+                        </constraints>
+                        <properties>
+                          <text value="stats"/>
+                        </properties>
+                      </component>
                     </children>
                   </grid>
                   <grid id="b1abc" binding="catalogContainer" layout-manager="CardLayout" hgap="0" vgap="0">
@@ -461,31 +470,61 @@
           </splitpane>
         </children>
       </grid>
-      <grid id="e9a9d" binding="ctrlPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+      <component id="f1d13" class="javax.swing.JTree" binding="tableTree">
+        <constraints border-constraint="West"/>
+        <properties/>
+      </component>
+      <grid id="783a4" binding="bottomPane" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="South"/>
         <properties/>
-        <border type="none">
-          <title-color color="-16777216"/>
-        </border>
+        <border type="none"/>
         <children>
-          <component id="c0f67" class="javax.swing.JButton" binding="statBtn">
-            <constraints/>
-            <properties>
-              <text value="统计信息"/>
-            </properties>
-          </component>
-          <component id="28753" class="javax.swing.JButton" binding="ex2csvBtn">
-            <constraints/>
-            <properties>
-              <text value="输出 CSV"/>
-            </properties>
-          </component>
-          <component id="6d900" class="javax.swing.JButton" binding="savBtn">
-            <constraints/>
-            <properties>
-              <text value="保存通讯录"/>
-            </properties>
-          </component>
+          <grid id="e9a9d" binding="ctrlPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+            <constraints border-constraint="East"/>
+            <properties/>
+            <border type="none">
+              <title-color color="-16777216"/>
+            </border>
+            <children>
+              <component id="28753" class="javax.swing.JButton" binding="ex2csvBtn">
+                <constraints/>
+                <properties>
+                  <text value="输出 CSV"/>
+                </properties>
+              </component>
+              <component id="6d900" class="javax.swing.JButton" binding="savBtn">
+                <constraints/>
+                <properties>
+                  <text value="保存通讯录"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
+          <grid id="c2c0f" binding="StatPane" layout-manager="GridBagLayout">
+            <constraints border-constraint="West"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="22c24" class="javax.swing.JLabel" binding="tableCountLbl">
+                <constraints>
+                  <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value="TABLECOUNT"/>
+                </properties>
+              </component>
+              <component id="e659b" class="javax.swing.JLabel" binding="contactCountLbl">
+                <constraints>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                  <gridbag weightx="0.0" weighty="0.0"/>
+                </constraints>
+                <properties>
+                  <text value="CONTACTCOUNT"/>
+                </properties>
+              </component>
+            </children>
+          </grid>
         </children>
       </grid>
     </children>
