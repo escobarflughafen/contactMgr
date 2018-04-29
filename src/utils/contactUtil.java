@@ -109,7 +109,19 @@ public class contactUtil {
     }
 
     public void contactSearch(String searchAttempt, Vector<member> contacts, Vector<String> searchResult, Vector<Integer> searchResultIndex, JList list){
-        String rPattern = ".*" + searchAttempt + ".*";
+        String rPattern = "";
+        String searchArr[] = searchAttempt.split(" ");
+
+        for(int j = 0; j < searchArr.length; j++){
+            rPattern += searchArr[j];
+            if(j != searchArr.length - 1){
+                rPattern += ".*";
+            }
+        }
+
+        rPattern = ".*" + rPattern + ".*";
+
+        System.out.println("contactSearch REGEX PATTERN: " + rPattern); // SHOW REGEX PATTERN IN COMMAND LINE
 
         boolean isMatch = false;
 
@@ -120,7 +132,7 @@ public class contactUtil {
             } */
            isMatch = Pattern.matches(rPattern,contacts.get(i).toString());
            if(isMatch){
-               searchResult.add(contacts.get(i).toString());
+               searchResult.add(contacts.get(i).getName() + " (" + contacts.get(i).toString() + ")");
                searchResultIndex.add(i);
            }
 

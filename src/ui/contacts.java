@@ -4,14 +4,18 @@ import classes.member;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Vector;
 
+import org.omg.CORBA.INTERNAL;
 import utils.revokeStack;
 import utils.csvUtil;
 import utils.contactUtil;
@@ -69,6 +73,7 @@ public class contacts {
     private JPanel catalogContainer;
     private JList searchResultList;
     private JPanel searchPane;
+    private JSpinner catalogTextSizeSpin;
 
     //constants
     private int columnCount = 9;
@@ -96,12 +101,14 @@ public class contacts {
     DefaultTableModel infoModel = new DefaultTableModel(colHeaders, 0);
     DefaultTableModel userInfoModel = new DefaultTableModel(userInfoHeaders, 0);
 
+
     public contacts(String username) {
         this.username = username;
         catalogue.setModel(infoModel);
         infoTable.setModel(userInfoModel);
         contactBuilder.setUsername(username);
         contactBuilder.setUserInfo(userInfoModel);
+
 
         searchPane.setVisible(false);
         searchResultList.remove(0);
@@ -112,11 +119,46 @@ public class contacts {
         JFrame frame = new JFrame("contacts");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setMinimumSize(new Dimension(800, 600));
         frame.pack();
         frame.setVisible(true);
 
-        //Table row selection Listener;
 
+        // 搜索框监听器 实时显示搜索内容
+        searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                System.out.println("insertUpdate");
+                searchResult.removeAllElements();
+                searchResultIndex.removeAllElements();
+                //searching
+                contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
+
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                System.out.println("removeUpdate");
+                searchResult.removeAllElements();
+                searchResultIndex.removeAllElements();
+                //searching
+                contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
+
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                System.out.println("changedUpdate");
+                searchResult.removeAllElements();
+                searchResultIndex.removeAllElements();
+                //searching
+                contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
+
+            }
+        });
+
+
+        // get (row,col)
         catalogue.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
@@ -370,7 +412,8 @@ public class contacts {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-
+                searchResult.removeAllElements();
+                searchResultIndex.removeAllElements();
                 //searching
                 contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
 
@@ -382,6 +425,14 @@ public class contacts {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
+            }
+        });
+        catalogTextSizeSpin.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                //catalogue.setFont(new Font("courier", Font.PLAIN, Integer.valueOf(catalogTextSizeSpin.getValue().toString())));
+
             }
         });
     }
@@ -471,6 +522,9 @@ public class contacts {
         editStatusLbl = new JLabel();
         editStatusLbl.setText("");
         btnPane.add(editStatusLbl);
+        catalogTextSizeSpin = new JSpinner();
+        catalogTextSizeSpin.setVisible(false);
+        btnPane.add(catalogTextSizeSpin);
         searchPane = new JPanel();
         searchPane.setLayout(new BorderLayout(0, 0));
         searchPane.setVisible(true);
@@ -482,7 +536,7 @@ public class contacts {
         searchPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-16777216)), null));
         searchResultList = new JList();
         final DefaultListModel defaultListModel1 = new DefaultListModel();
-        defaultListModel1.addElement("3117004478");
+        defaultListModel1.addElement("searchResult");
         searchResultList.setModel(defaultListModel1);
         searchResultList.setVisible(true);
         searchPane.add(searchResultList, BorderLayout.CENTER);
@@ -720,13 +774,13 @@ public class contacts {
         userPane.setLayout(new BorderLayout(0, 0));
         modifyTabbedPane.addTab("用户", userPane);
         btnPane2 = new JPanel();
-        btnPane2.setLayout(new BorderLayout(0, 0));
+        btnPane2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         userPane.add(btnPane2, BorderLayout.SOUTH);
         editProfileBtn = new JButton();
-        editProfileBtn.setText("修改用户信息");
-        btnPane2.add(editProfileBtn, BorderLayout.CENTER);
+        editProfileBtn.setText("修改密码");
+        btnPane2.add(editProfileBtn);
         userInfoPane = new JScrollPane();
-        userPane.add(userInfoPane, BorderLayout.CENTER);
+        userPane.add(userInfoPane, BorderLayout.NORTH);
         userInfoPane.setBorder(BorderFactory.createTitledBorder(null, "用户信息", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(-16777216)));
         infoTable = new JTable();
         infoTable.setSelectionForeground(new Color(-1250068));
@@ -734,9 +788,6 @@ public class contacts {
         ctrlPanel = new JPanel();
         ctrlPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         panel1.add(ctrlPanel, BorderLayout.SOUTH);
-        searchByCondBtn = new JButton();
-        searchByCondBtn.setText("条件查询");
-        ctrlPanel.add(searchByCondBtn);
         statBtn = new JButton();
         statBtn.setText("统计信息");
         ctrlPanel.add(statBtn);
