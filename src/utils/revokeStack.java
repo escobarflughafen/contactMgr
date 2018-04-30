@@ -4,9 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.EmptyStackException;
 import java.util.Stack;
+import classes.member;
 
 public class revokeStack {
-    private Stack <String[]> revokStack = new Stack<>();
+    private Stack <member> revokStack = new Stack<>();
     private Stack <Integer> indexStack = new Stack<>();
 
     //private JTable table;
@@ -15,7 +16,7 @@ public class revokeStack {
         indexStack.push(idx);
     }
 
-    public void enDelet(String[] row){
+    public void enDelet(member row){
         revokStack.push(row);
     }
 
@@ -27,7 +28,7 @@ public class revokeStack {
         }
     }
 
-    public String[] popRevoke(){
+    public member popRevoke(){
         if(!revokStack.isEmpty()){
             return revokStack.pop();
         } else {

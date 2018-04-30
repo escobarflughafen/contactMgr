@@ -9,6 +9,11 @@ import java.sql.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.MutableTreeNode;
+import javax.swing.tree.TreeModel;
+
+import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import utils.revokeStack;
 import java.util.regex.*;
 
@@ -48,24 +53,7 @@ public class contactUtil {
 
     }
 
-    public void deleteRow(JTable table, int rowIndex , DefaultTableModel model,revokeStack revokStack){
-        if (rowIndex >= 0){
-            revokStack.enIndex(rowIndex);
-            String[] row = new String [table.getColumnCount()];
-            for(int i = 0; i< table.getColumnCount() ; i++){
-                row[i] = ((table.getValueAt(rowIndex, i) == null) ? "" : table.getValueAt(rowIndex, i).toString());
-                System.out.print(row[i] + ((i == table.getColumnCount()) ? "" :","));
-            }
 
-            revokStack.enDelet(row);
-            model.removeRow(rowIndex);
-
-        }
-    }
-
-    public void revokeDeletRow(JTable table, DefaultTableModel model, revokeStack revokStack){
-        model.insertRow(revokStack.popIndex(),revokStack.popRevoke());
-    }
 
 
     public void saveRow(JTable table, int rowIndex, DefaultTableModel model,member memInfo){
@@ -77,17 +65,22 @@ public class contactUtil {
 
     }
 
-    public void createNewRow(JTable table, int rowIndex, DefaultTableModel model){
-        String[] emptyRow = {""};
-        model.insertRow((rowIndex == 0 && table.getRowCount() == 0) ? rowIndex : rowIndex + 1, emptyRow); // 插入空表：插入非空表
-    }
 
     public String obj2str(Object obj){
         return (obj != null) ? obj.toString() : "";
     }
 
     public member readRowToMember(JTable table, int rowIndex){
-        member ret = new member();
+        member ret = new member(obj2str(table.getValueAt(rowIndex,0)),
+                                obj2str(table.getValueAt(rowIndex,1)),
+                                obj2str(table.getValueAt(rowIndex,2)),
+                                obj2str(table.getValueAt(rowIndex,3)),
+                obj2str(table.getValueAt(rowIndex,4)),
+                obj2str(table.getValueAt(rowIndex,5)),
+                obj2str(table.getValueAt(rowIndex,6)),
+                obj2str(table.getValueAt(rowIndex,7)),
+                obj2str(table.getValueAt(rowIndex,8)));
+        /*
         ret.setId(obj2str(table.getValueAt(rowIndex,0)));
         ret.setName(obj2str(table.getValueAt(rowIndex,1)));
         ret.setGroup(obj2str(table.getValueAt(rowIndex,2)));
@@ -97,6 +90,7 @@ public class contactUtil {
         ret.setEmail(obj2str(table.getValueAt(rowIndex,6)));
         ret.setDormitory(obj2str(table.getValueAt(rowIndex,7)));
         ret.setAddress(obj2str(table.getValueAt(rowIndex,8)));
+        */
         return ret;
     }
 
@@ -144,5 +138,64 @@ public class contactUtil {
 
 
     }
+
+    public void treeBuild(Vector <member> members, String[] groups, DefaultMutableTreeNode root){
+        for(int i = 0; i < members.size(); i++){
+            if(members.get(i).getGroup() == groups[0]){
+                ((DefaultMutableTreeNode)root.getChildAt(0)).add(new DefaultMutableTreeNode(members.get(i).getName()));
+            }
+            if(members.get(i).getGroup() == groups[1]){
+                ((DefaultMutableTreeNode)root.getChildAt(1)).add(new DefaultMutableTreeNode(members.get(i).getName()));
+            }
+            if(members.get(i).getGroup() == groups[2]){
+                ((DefaultMutableTreeNode)root.getChildAt(2)).add(new DefaultMutableTreeNode(members.get(i).getName()));
+            }
+            if(members.get(i).getGroup() == groups[3]){
+                ((DefaultMutableTreeNode)root.getChildAt(3)).add(new DefaultMutableTreeNode(members.get(i).getName()));
+            }
+            if(members.get(i).getGroup() == groups[4]){
+                ((DefaultMutableTreeNode)root.getChildAt(4)).add(new DefaultMutableTreeNode(members.get(i).getName()));
+            }
+            if(members.get(i).getGroup() == groups[5]){
+                ((DefaultMutableTreeNode)root.getChildAt(5)).add(new DefaultMutableTreeNode(members.get(i).getName()));
+            }
+        }
+    }
+
+
+    public void tableRefresh(DefaultTableModel model, Vector<member> contacts){
+        if(model.getRowCount() > 0) {
+            for (int j = model.getRowCount() - 1; j >= 0; j--) {
+                model.removeRow(j);
+            }
+        }
+
+        /*Vector <member> tempVec = contacts;
+        for(int k = tempVec.size() -1; k >= 0; k--){
+            if(tempVec.get(k) == null) tempVec.remove(k);
+        }*/
+
+        for (int i = 0; i < contacts.size(); i++){
+            model.insertRow(i, contacts.get(i).toArray());
+        }
+
+    }
+
+    public boolean swapMember(Vector <member> vec, int pos1, int pos2) {
+        if (pos1 < 0 || pos2 < 0 || pos1 >= vec.size() || pos2 >= vec.size())
+            return false;
+
+        member temp1 = vec.get(pos1);
+        member temp2 = vec.get(pos2);
+
+        vec.remove(pos1);
+        vec.insertElementAt(temp2, pos1);
+        vec.remove(pos2);
+        vec.insertElementAt(temp1, pos2);
+
+        return true;
+    }
+
+
 
 }

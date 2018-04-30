@@ -1,15 +1,14 @@
 DROP TABLE
 IF
-	EXISTS 'admin';
-CREATE TABLE 'admin' (
-	id INT ( 11 ) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '用户UID',
+	EXISTS 't_user';
+CREATE TABLE 't_user' (
 	username VARCHAR ( 40 ) NOT NULL UNIQUE COMMENT '用户名',
 	PASSWORD VARCHAR ( 40 ) NOT NULL COMMENT '密码'
 );
 DROP TABLE
 IF
-	EXISTS 'members';
-CREATE TABLE 'members' (
+	EXISTS 't_members';
+CREATE TABLE 't_members' (
 	id CHAR ( 10 ) NOT NULL PRIMARY KEY UNIQUE COMMENT 'ID',
 	NAME CHAR ( 10 ) NOT NULL COMMENT '姓名',
 	GROUP CHAR ( 10 ) NOT NULL COMMENT '方向',
@@ -20,6 +19,10 @@ CREATE TABLE 'members' (
 	dormitory CHAR ( 10 ) NOT NULL COMMENT '宿舍',
 	address CHAR ( 40 ) NOT NULL COMMENT '住址'
 );
-INSERT INTO 'members'
+INSERT INTO 't_members'
 VALUES
 	( '1', 'lee', 'ml', '01', '02', '110', 'lee@lee.com', '351', '4-351' );
+
+INSERT INTO 't_user'
+VALUES
+    ('admin','admin');

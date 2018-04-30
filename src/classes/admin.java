@@ -1,7 +1,7 @@
 package classes;
 
 public class admin {
-    private int id;
+    private boolean flag = false;
     private String username;
     private String password;
 
@@ -17,22 +17,20 @@ public class admin {
         return username;
     }
 
+    public void isLogin(){
+        flag = true;
+    }
+
+    public void isLogout(){
+        flag = false;
+    }
+
     public void setUsername(String username){
         this.username = username;
     }
 
-    public admin(String username,String password){
-        setUsername(username);
-        setPassword(password);
-    }
-
-    @Override
-    public String toString(){
-        return ("Admin{" +
-                "id = "+ id +
-                ", username = " + username + '\\' +
-                ", password = " + password + '\\' +
-                '}');
+    public admin(){
 
     }
+
 }

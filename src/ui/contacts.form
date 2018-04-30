@@ -57,7 +57,7 @@
                           <gridbag weightx="1.0" weighty="1.0"/>
                         </constraints>
                         <properties>
-                          <text value="Keywords"/>
+                          <text value="关键字"/>
                           <toolTipText value="输入搜索内容"/>
                         </properties>
                       </component>
@@ -108,15 +108,24 @@
                           <color color="-16777216"/>
                         </border>
                         <children>
-                          <component id="79cb6" class="javax.swing.JList" binding="searchResultList">
+                          <scrollpane id="37ba8">
                             <constraints border-constraint="Center"/>
                             <properties>
-                              <model>
-                                <item value="searchResult"/>
-                              </model>
-                              <visible value="true"/>
+                              <preferredSize width="64" height="98"/>
                             </properties>
-                          </component>
+                            <border type="none"/>
+                            <children>
+                              <component id="79cb6" class="javax.swing.JList" binding="searchResultList">
+                                <constraints/>
+                                <properties>
+                                  <model>
+                                    <item value="&lt;搜索结果&gt;"/>
+                                  </model>
+                                  <visible value="true"/>
+                                </properties>
+                              </component>
+                            </children>
+                          </scrollpane>
                         </children>
                       </grid>
                       <component id="58b6f" class="javax.swing.JLabel" binding="searchStatLbl">
@@ -125,7 +134,7 @@
                           <gridbag weightx="0.0" weighty="0.0"/>
                         </constraints>
                         <properties>
-                          <text value="stats"/>
+                          <text value=""/>
                         </properties>
                       </component>
                     </children>
@@ -470,10 +479,6 @@
           </splitpane>
         </children>
       </grid>
-      <component id="f1d13" class="javax.swing.JTree" binding="tableTree">
-        <constraints border-constraint="West"/>
-        <properties/>
-      </component>
       <grid id="783a4" binding="bottomPane" layout-manager="BorderLayout" hgap="0" vgap="0">
         <constraints border-constraint="South"/>
         <properties/>
@@ -505,26 +510,30 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="22c24" class="javax.swing.JLabel" binding="tableCountLbl">
+              <component id="e659b" class="javax.swing.JLabel" binding="contactCountLbl">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
                   <gridbag weightx="0.0" weighty="0.0"/>
                 </constraints>
                 <properties>
-                  <text value="TABLECOUNT"/>
-                </properties>
-              </component>
-              <component id="e659b" class="javax.swing.JLabel" binding="contactCountLbl">
-                <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
-                  <gridbag weightx="0.0" weighty="0.0"/>
-                </constraints>
-                <properties>
-                  <text value="CONTACTCOUNT"/>
+                  <text value=""/>
                 </properties>
               </component>
             </children>
           </grid>
+        </children>
+      </grid>
+      <grid id="c4ed8" binding="westPane" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="West"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="487aa" class="javax.swing.JTree" binding="tableTree">
+            <constraints border-constraint="East"/>
+            <properties>
+              <visible value="false"/>
+            </properties>
+          </component>
         </children>
       </grid>
     </children>

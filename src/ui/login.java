@@ -7,7 +7,10 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.sql.Connection;
 
+import utils.loginUtil;
+import utils.dbUtil;
 import ui.contacts.*;
 
 public class login {
@@ -21,6 +24,10 @@ public class login {
     private JPanel logPanel;
     private JLabel usernameLbl;
     private JLabel passwdLbl;
+    private JLabel statusLbl;
+    Connection con = null;
+
+
 
     public static void main() {
         login nl = new login();
@@ -28,13 +35,15 @@ public class login {
 
 
     public login() {
-
         JFrame frame = new JFrame("QG通讯录 登录");
         frame.setContentPane(panel1);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         frame.pack();
         frame.setVisible(true);
+        dbUtil dbUtil = new dbUtil();
+
+        loginUtil toLogin = new loginUtil();
 
         loginBtn.addMouseMotionListener(new MouseMotionAdapter() {
         });
@@ -43,16 +52,21 @@ public class login {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 String passwd = new String(passwdTextField.getPassword());
-                admin user = new admin(userTextField.getText(), passwd);
+                admin user = new admin();
+                user.setUsername(userTextField.getText());
+                user.setPassword(passwd);
 
-                if (user.getPassword().equals("123456") && user.getUsername().equals("abc")) {
-                    new contacts(user.getUsername());
-                    frame.setVisible(false);
-
-
+                if (user.getPassword().isEmpty() || user.getUsername().isEmpty()) {
+                    statusLbl.setText("请填写用戶名和密码");
                 } else {
-                    userTextField.setText("WRONG INFO");
-
+                    try {
+                        con = dbUtil.getConnection();
+                        toLogin.login(con, user);
+                        new contacts(user.getUsername());
+                        frame.setVisible(false);
+                    } catch (Exception ee) {
+                        ee.printStackTrace();
+                    }
                 }
             }
         });
@@ -167,6 +181,13 @@ public class login {
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         logPanel.add(userTextField, gbc);
+        statusLbl = new JLabel();
+        statusLbl.setText("");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.anchor = GridBagConstraints.WEST;
+        logPanel.add(statusLbl, gbc);
     }
 
     /**

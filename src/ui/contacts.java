@@ -6,8 +6,7 @@ import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.tree.TreeModel;
-import javax.swing.tree.TreePath;
+import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Vector;
@@ -70,11 +69,11 @@ public class contacts {
     private JPanel searchPane;
     private JSpinner catalogTextSizeSpin;
     private JLabel searchStatLbl;
-    private JTree tableTree;
     private JPanel bottomPane;
     private JPanel StatPane;
-    private JLabel tableCountLbl;
     private JLabel contactCountLbl;
+    private JPanel westPane;
+    private JTree tableTree;
 
     //constants
     private int columnCount = 9;
@@ -89,6 +88,7 @@ public class contacts {
     private Vector<member> contacts;
     private Vector<String> searchResult = new Vector<>();
     private Vector<Integer> searchResultIndex = new Vector<>();
+    private int saveCount = 0;
 
 
     //revoking stack
@@ -98,6 +98,7 @@ public class contacts {
 
     String colHeaders[] = {"ID", "姓名", "方向", "年级", "班级", "电话", "电邮", "宿舍", "住址"};
     String userInfoHeaders[] = {"项", "值"};
+    String groups[] = {"数据挖掘", "嵌入式", "前端", "后端", "手游", "设计"}; //need readFROM DATABASE
 
     DefaultTableModel infoModel = new DefaultTableModel(colHeaders, 0);
     DefaultTableModel userInfoModel = new DefaultTableModel(userInfoHeaders, 0);
@@ -117,6 +118,28 @@ public class contacts {
 
 
         contacts = contactBuilder.createAllContactObjects(catalogue);
+        DefaultMutableTreeNode root = new DefaultMutableTreeNode("QG工作室");
+        root.setAllowsChildren(true);
+
+        DefaultMutableTreeNode groupA = new DefaultMutableTreeNode("数据挖掘");
+        DefaultMutableTreeNode groupB = new DefaultMutableTreeNode("嵌入式");
+        DefaultMutableTreeNode groupC = new DefaultMutableTreeNode("前端");
+        DefaultMutableTreeNode groupD = new DefaultMutableTreeNode("后端");
+        DefaultMutableTreeNode groupE = new DefaultMutableTreeNode("手游");
+        DefaultMutableTreeNode groupF = new DefaultMutableTreeNode("设计");
+        root.add(groupA);
+        root.add(groupB);
+        root.add(groupC);
+        root.add(groupD);
+        root.add(groupE);
+        root.add(groupF);
+
+
+        System.out.println(groupA.getParent());
+
+        DefaultTreeModel tmdl = new DefaultTreeModel(root);
+
+        tableTree.setModel(tmdl);
 
         JFrame frame = new JFrame("contacts");
         frame.setContentPane(panel1);
@@ -172,6 +195,7 @@ public class contacts {
                 editStatusLbl.setText(String.valueOf(selectedRowIdx) + ", " + String.valueOf(selectedColumnIdx)); */
                 selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
                 selectedColumnIdx = catalogue.getSelectedColumn();
+                contactCountLbl.setText("共 " + contacts.size() + " 条记录");
 
 
                 //  idTextField.setText(infoModel.getValueAt(selectedRowIdx, 0).toString());
@@ -247,30 +271,22 @@ public class contacts {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 if (selectedRowIdx >= 0) {
-                    member memInfo = new member();
+                    member memInfo = new member(idTextField.getText(),
+                            nameTextField.getText(),
+                            groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
+                            gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
+                            clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
+                            teleNumTextField.getText(),
+                            emailTextField.getText(),
+                            dormTextField.getText(),
+                            addrTextField.getText());
 
-                    memInfo.setId(idTextField.getText());
-                    memInfo.setName(nameTextField.getText());
-                    memInfo.setGroup(groupBox.getItemAt(groupBox.getSelectedIndex()).toString());
-                    memInfo.setGrade(gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString());
-                    memInfo.setClas(clasBox.getItemAt(clasBox.getSelectedIndex()).toString());
-                    memInfo.setPhoneNum(teleNumTextField.getText());
-                    memInfo.setEmail(emailTextField.getText());
-                    memInfo.setDormitory(dormTextField.getText());
-                    memInfo.setAddress(addrTextField.getText());
                     /*
                     int tempRowIndex = selectedRowIdx;
                     infoModel.removeRow(tempRowIndex);
                     infoModel.insertRow(tempRowIndex, memInfo.getRecord());
                     */
 
-                    contactBuilder.saveRow(catalogue, selectedRowIdx, infoModel, memInfo);
-
-                    contacts = contacts = contactBuilder.createAllContactObjects(catalogue);
-                    contactCountLbl.setText("共 " + contacts.size() + " 条记录");
-
-
-                    isSaved = false;
                 }
             }
         });
@@ -281,10 +297,12 @@ public class contacts {
                 super.mousePressed(e);
                 int deletRowIndex = selectedRowIdx;
                 //revokRow = {idTextField.getText(),nameTextField.getText(),groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),}
-                contactBuilder.deleteRow(catalogue, deletRowIndex, infoModel, deletStack);
-                contacts = contactBuilder.createAllContactObjects(catalogue);
-                contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+                deletStack.enDelet(contacts.remove(deletRowIndex));
+                deletStack.enIndex(deletRowIndex);
+                // contactCountLbl.setText("共 " + contacts.size() + " 条记录");
                 System.out.println(deletStack.toString());
+
+                contactBuilder.tableRefresh(infoModel, contacts);
 
             /*    if (selectedRowIdx >= 0) {
 
@@ -308,16 +326,67 @@ public class contacts {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
+                if (saveCount == 0) {
+                    selectedRowIdx = 0;
+                    selectedColumnIdx = 0;
+                }
                 /*
                 String[] emptyRow = {""};
                 infoModel.insertRow((selectedRowIdx == 0 && rowCount == 0) ? selectedRowIdx : selectedRowIdx + 1, emptyRow); // 插入空表：插入非空表
                 rowCount++;
+                *
                 */
-                contactBuilder.createNewRow(catalogue, selectedRowIdx, infoModel);
-                contacts = contactBuilder.createAllContactObjects(catalogue);
-                contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+
+                int recRow = selectedRowIdx;
+
+                contacts.insertElementAt(new member("", "", "", "", "", "", "", "", ""), selectedRowIdx);
+                // contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+                contactBuilder.swapMember(contacts, selectedRowIdx, selectedRowIdx + 1);
+                contactBuilder.tableRefresh(infoModel, contacts);
+                selectedRowIdx = recRow + 1;  // move pointer to the created row
+                saveCount++;
                 isSaved = false;
 
+            }
+        });
+
+        saveBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+                if (selectedRowIdx >= 0) {
+                    int recRow = selectedRowIdx;
+                    int recCol = selectedColumnIdx;
+                    member memInfo = new member(idTextField.getText(),
+                            nameTextField.getText(),
+                            groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
+                            gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
+                            clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
+                            teleNumTextField.getText(),
+                            emailTextField.getText(),
+                            dormTextField.getText(),
+                            addrTextField.getText());
+                    /*
+                    memInfo.setId(idTextField.getText());
+                    memInfo.setName(nameTextField.getText());
+                    memInfo.setGroup(groupBox.getItemAt(groupBox.getSelectedIndex()).toString());
+                    memInfo.setGrade(gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString());
+                    memInfo.setClas(clasBox.getItemAt(clasBox.getSelectedIndex()).toString());
+                    memInfo.setPhoneNum(teleNumTextField.getText());
+                    memInfo.setEmail(emailTextField.getText());
+                    memInfo.setDormitory(dormTextField.getText());
+                    memInfo.setAddress(addrTextField.getText());
+                    */
+                    contacts.remove(selectedRowIdx);
+                    contacts.insertElementAt(memInfo, selectedRowIdx);
+                    contactBuilder.tableRefresh(infoModel, contacts);
+
+                    selectedColumnIdx = recCol;
+                    selectedRowIdx = recRow;
+
+                    isSaved = false;
+
+                }
             }
         });
 
@@ -326,9 +395,11 @@ public class contacts {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
                 //infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
-                contactBuilder.revokeDeletRow(catalogue, infoModel, deletStack);
-                contacts = contactBuilder.createAllContactObjects(catalogue);
-                contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+                int revkIndex = deletStack.popIndex();
+                contacts.insertElementAt(deletStack.popRevoke(), revkIndex);
+                // contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+                contactBuilder.tableRefresh(infoModel, contacts);
+
 
             }
         });
@@ -363,34 +434,8 @@ public class contacts {
                 selectedColumnIdx = catalogue.getSelectedColumn();
 
                 editStatusLbl.setText(String.valueOf(selectedRowIdx) + ", " + String.valueOf(selectedColumnIdx));
+                contactCountLbl.setText("共 " + contacts.size() + " 条记录");
                 contacts = contactBuilder.createAllContactObjects(catalogue);
-            }
-        });
-
-        saveBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                if (selectedRowIdx >= 0) {
-                    member memInfo = new member();
-
-                    memInfo.setId(idTextField.getText());
-                    memInfo.setName(nameTextField.getText());
-                    memInfo.setGroup(groupBox.getItemAt(groupBox.getSelectedIndex()).toString());
-                    memInfo.setGrade(gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString());
-                    memInfo.setClas(clasBox.getItemAt(clasBox.getSelectedIndex()).toString());
-                    memInfo.setPhoneNum(teleNumTextField.getText());
-                    memInfo.setEmail(emailTextField.getText());
-                    memInfo.setDormitory(dormTextField.getText());
-                    memInfo.setAddress(addrTextField.getText());
-
-
-                    contactBuilder.saveRow(catalogue, selectedRowIdx, infoModel, memInfo);
-
-                    contacts = contactBuilder.createAllContactObjects(catalogue);
-
-                    isSaved = false;
-                }
             }
         });
 
@@ -493,7 +538,7 @@ public class contacts {
         modifyPane.setToolTipText("");
         contactTable.add(modifyPane, BorderLayout.NORTH);
         searchTextField = new JTextField();
-        searchTextField.setText("Keywords");
+        searchTextField.setText("关键字");
         searchTextField.setToolTipText("输入搜索内容");
         GridBagConstraints gbc;
         gbc = new GridBagConstraints();
@@ -531,14 +576,17 @@ public class contacts {
         gbc.fill = GridBagConstraints.BOTH;
         modifyPane.add(searchPane, gbc);
         searchPane.setBorder(BorderFactory.createTitledBorder(BorderFactory.createLineBorder(new Color(-16777216)), null));
+        final JScrollPane scrollPane1 = new JScrollPane();
+        scrollPane1.setPreferredSize(new Dimension(64, 98));
+        searchPane.add(scrollPane1, BorderLayout.CENTER);
         searchResultList = new JList();
         final DefaultListModel defaultListModel1 = new DefaultListModel();
-        defaultListModel1.addElement("searchResult");
+        defaultListModel1.addElement("<搜索结果>");
         searchResultList.setModel(defaultListModel1);
         searchResultList.setVisible(true);
-        searchPane.add(searchResultList, BorderLayout.CENTER);
+        scrollPane1.setViewportView(searchResultList);
         searchStatLbl = new JLabel();
-        searchStatLbl.setText("stats");
+        searchStatLbl.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 1;
@@ -789,8 +837,6 @@ public class contacts {
         infoTable = new JTable();
         infoTable.setSelectionForeground(new Color(-1250068));
         userInfoPane.setViewportView(infoTable);
-        tableTree = new JTree();
-        panel1.add(tableTree, BorderLayout.WEST);
         bottomPane = new JPanel();
         bottomPane.setLayout(new BorderLayout(0, 0));
         panel1.add(bottomPane, BorderLayout.SOUTH);
@@ -806,20 +852,19 @@ public class contacts {
         StatPane = new JPanel();
         StatPane.setLayout(new GridBagLayout());
         bottomPane.add(StatPane, BorderLayout.WEST);
-        tableCountLbl = new JLabel();
-        tableCountLbl.setText("TABLECOUNT");
+        contactCountLbl = new JLabel();
+        contactCountLbl.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.anchor = GridBagConstraints.EAST;
-        StatPane.add(tableCountLbl, gbc);
-        contactCountLbl = new JLabel();
-        contactCountLbl.setText("CONTACTCOUNT");
-        gbc = new GridBagConstraints();
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        gbc.anchor = GridBagConstraints.EAST;
         StatPane.add(contactCountLbl, gbc);
+        westPane = new JPanel();
+        westPane.setLayout(new BorderLayout(0, 0));
+        panel1.add(westPane, BorderLayout.WEST);
+        tableTree = new JTree();
+        tableTree.setVisible(false);
+        westPane.add(tableTree, BorderLayout.EAST);
     }
 
     /**

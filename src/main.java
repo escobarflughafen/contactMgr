@@ -13,10 +13,6 @@ import utils.revokeStack;
 public class main {
 
     public static void main(String[] args){
-        revokeStack a = new revokeStack();
-        a.enIndex(5);
-
-
         new login();
     }
 }

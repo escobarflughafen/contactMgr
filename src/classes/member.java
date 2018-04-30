@@ -17,8 +17,8 @@ public class member{
     private String dormitory;
     private String address;
 
-    public member(){//String id,String name,String group,String grade,String clas,String phoneNum,String email,String dormitory,String address){
-        /*
+    public member(String id,String name,String group,String grade,String clas,String phoneNum,String email,String dormitory,String address){
+
         setId(id);
         setName(name);
         setAddress(address);
@@ -28,7 +28,7 @@ public class member{
         setGroup(group);
         setPhoneNum(phoneNum);
         setGrade(grade);
-        */
+
     }
 
 
@@ -69,39 +69,39 @@ public class member{
     }
 
     public String getId(){
-        return id;
+        return ((id != null) ? id : "");
     }
 
-    public String getName(){
-        return name;
+    public String getName() {
+        return ((name != null) ? name : "");
     }
 
     public String getGroup() {
-        return group;
+        return ((group != null) ? group : "");
     }
 
     public String getGrade(){
-        return grade;
+        return ((grade != null) ? grade : "");
     }
 
     public String getClas(){
-        return clas;
+        return ((clas != null) ? clas : "");
     }
 
     public String getPhoneNum(){
-        return phoneNum;
+        return ((phoneNum != null) ? phoneNum : "");
     }
 
     public String getEmail(){
-        return email;
+        return ((email != null) ? email : "");
     }
 
     public String getDormitory(){
-        return dormitory;
+        return ((dormitory != null) ? dormitory : "");
     }
 
     public String getAddress(){
-        return address;
+        return ((address != null) ? address : "");
     }
 
     public String[] getRecord(){
@@ -127,6 +127,8 @@ public class member{
                     "," + dormitory +
                     "," + address);
     }
+
+
 
     public String[] toArray(){
 
