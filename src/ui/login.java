@@ -59,8 +59,8 @@ public class login {
                     try {
                         con = dbUtil.getConnection();
                         if (toLogin.login(con, user)) {
-                            new contacts(user.getUsername());
-                            frame.setVisible(false);
+                            new contacts(user);
+                            frame.dispose();
                         } else {
                             statusLbl.setText("用户名或密码错误");
                         }

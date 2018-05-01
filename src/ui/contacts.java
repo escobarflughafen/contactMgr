@@ -1,5 +1,6 @@
 package ui;
 
+import classes.admin;
 import classes.member;
 
 import javax.swing.*;
@@ -13,11 +14,13 @@ import java.sql.Connection;
 import java.util.Date;
 import java.util.Vector;
 
+import jdk.nashorn.internal.scripts.JO;
 import utils.revokeStack;
 import utils.csvUtil;
 import utils.contactUtil;
 import utils.dbUtil;
 import utils.memberUtil;
+import utils.loginUtil;
 
 public class contacts {
 
@@ -59,14 +62,12 @@ public class contacts {
     private JComboBox gradeBox;
     private JComboBox clasBox;
     private JScrollPane contentsScrollPane;
-    private JButton savBtn;
+    private JButton dbSaveBtn;
     private JButton revokeDeleteBtn;
     private JPanel btnPane;
     private JPanel userPane;
-    private JButton editProfileBtn;
-    private JPanel btnPane2;
+    private JPanel userCtrlPane;
     private JTable infoTable;
-    private JScrollPane userInfoPane;
     private JLabel editStatusLbl;
     private JPanel catalogContainer;
     private JList searchResultList;
@@ -78,6 +79,10 @@ public class contacts {
     private JLabel contactCountLbl;
     private JPanel westPane;
     private JTree tableTree;
+    private JButton createUserBtn;
+    private JButton editPasswdBtn;
+    private JButton deletUserBtn;
+    private JLabel usrLbl;
     private JLabel dbStatus;
 
     //constants
@@ -95,6 +100,10 @@ public class contacts {
     private Vector<Integer> searchResultIndex = new Vector<>();
     private int saveCount = 0;
 
+    public int CONTACTS_SAVE = 0;
+    public int CONTACTS_CANCEL = 1;
+    public int CONTACTS_DISPOSE = 2;
+
 
     //revoking stack
     public revokeStack deletStack = new revokeStack();
@@ -102,24 +111,23 @@ public class contacts {
 
 
     String colHeaders[] = {"ID", "姓名", "方向", "年级", "班级", "电话", "电邮", "宿舍", "住址"};
-    String userInfoHeaders[] = {"项", "值"};
     String groups[] = {"数据挖掘", "嵌入式", "前端", "后端", "手游", "设计"}; //need readFROM DATABASE
 
     DefaultTableModel infoModel = new DefaultTableModel(colHeaders, 0);
-    DefaultTableModel userInfoModel = new DefaultTableModel(userInfoHeaders, 0);
 
     private dbUtil dbLink = new dbUtil();
     private memberUtil dbReader = new memberUtil();
+    private loginUtil adminMgr = new loginUtil();
 
 
-    public contacts(String username) {
+    public contacts(admin administrator) {
+
         try {
+            usrLbl.setText(administrator.getUsername());
             Connection con = dbLink.getConnection();
             this.username = username;
             catalogue.setModel(infoModel);
-            infoTable.setModel(userInfoModel);
             contactBuilder.setUsername(username);
-            contactBuilder.setUserInfo(userInfoModel);
 
             contacts = dbReader.readFromDB(con);
             contactBuilder.tableRefresh(infoModel, contacts);
@@ -128,8 +136,7 @@ public class contacts {
             searchStatLbl.setVisible(false);
             searchResultList.remove(0);
 
-
-            contacts = contactBuilder.createAllContactObjects(catalogue);
+            contactCountLbl.setText("共 " + contacts.size() + " 条记录");
             DefaultMutableTreeNode root = new DefaultMutableTreeNode("QG工作室");
             root.setAllowsChildren(true);
 
@@ -153,9 +160,71 @@ public class contacts {
 
             tableTree.setModel(tmdl);
 
-            JFrame frame = new JFrame("contacts");
+            JFrame frame = new JFrame("通讯录");
             frame.setContentPane(panel1);
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+            frame.addWindowListener(new WindowListener() {
+                @Override
+                public void windowOpened(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowClosing(WindowEvent e) {
+
+                    if (isSaved) {
+                        System.exit(1);
+                    } else {
+                        Object[] options = {"保存", "不保存", "取消"};
+                        int status = JOptionPane.showOptionDialog(null, "要在关闭之前保存对通讯录的更改吗？", "未保存",
+                                JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,
+                                null, options, options[0]);
+                        if (status == 0) {
+                            try {
+                                dbReader.saveDB(contacts, dbLink.getConnection());
+                                isSaved = true;
+                                System.exit(1);
+                            } catch (Exception eee) {
+                                eee.printStackTrace();
+                            }
+                        }
+                        if (status == 1) {
+                            System.exit(1);
+                        }
+                        if (status == 2) {
+                            //WELCOME BACK
+                        }
+
+                    }
+
+
+                }
+
+                @Override
+                public void windowClosed(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowIconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeiconified(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowActivated(WindowEvent e) {
+
+                }
+
+                @Override
+                public void windowDeactivated(WindowEvent e) {
+
+                }
+            });
             frame.setMinimumSize(new Dimension(800, 600));
             frame.pack();
             frame.setVisible(true);
@@ -208,6 +277,7 @@ public class contacts {
                     selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
                     selectedColumnIdx = catalogue.getSelectedColumn();
                     contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+                    frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
 
 
                     //  idTextField.setText(infoModel.getValueAt(selectedRowIdx, 0).toString());
@@ -318,6 +388,7 @@ public class contacts {
 
                     contactBuilder.tableRefresh(infoModel, contacts);
                     isSaved = false;
+                    frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
 
 
             /*    if (selectedRowIdx >= 0) {
@@ -362,6 +433,7 @@ public class contacts {
                     selectedRowIdx = recRow + 1;  // move pointer to the created row
                     saveCount++;
                     isSaved = false;
+                    frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
 
                 }
             });
@@ -401,7 +473,7 @@ public class contacts {
                         selectedRowIdx = recRow;
 
                         isSaved = false;
-
+                        frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
 
                     }
                 }
@@ -417,7 +489,7 @@ public class contacts {
                     // contactCountLbl.setText("共 " + contacts.size() + " 条记录");
                     contactBuilder.tableRefresh(infoModel, contacts);
                     isSaved = false;
-
+                    frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
 
 
                 }
@@ -491,6 +563,34 @@ public class contacts {
                 }
             });
 
+            dbSaveBtn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    try {
+                        super.mousePressed(e);
+                        boolean status = dbReader.saveDB(contacts, dbLink.getConnection());
+                        if (status) {
+                            isSaved = true;
+
+
+                        } else {
+                            isSaved = false;
+
+                        }
+                        frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
+                    } catch (Exception ee) {
+                        ee.printStackTrace();
+                    }
+                }
+            });
+
+            panel1.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseMoved(MouseEvent e) {
+                    super.mouseMoved(e);
+                    frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
+                }
+            });
 
             searchTextField.addKeyListener(new KeyAdapter() {
                 @Override
@@ -505,27 +605,84 @@ public class contacts {
                     //catalogue.setFont(new Font("courier", Font.PLAIN, Integer.valueOf(catalogTextSizeSpin.getValue().toString())));
 
                 }
+
+
             });
+
 
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        savBtn.addMouseListener(new MouseAdapter() {
+
+        createUserBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                try {
-                    super.mousePressed(e);
-                    boolean status = dbReader.saveDB(contacts, dbLink.getConnection());
-                    if (status) {
-                        isSaved = false;
-                    } else {
-                        isSaved = true;
+                super.mousePressed(e);
+                Object[] possibleValues = {"用户名", "密码", "确认密码"}; // 用户的选择项目
+
+                String newUsername = new String();
+                String newPassword = new String();
+                newUsername = (String) JOptionPane.showInputDialog(null, possibleValues[0], "用户名", JOptionPane.QUESTION_MESSAGE);
+                newPassword = (String) JOptionPane.showInputDialog(null, possibleValues[1], "密码", JOptionPane.QUESTION_MESSAGE);
+                System.out.println(newUsername);
+                System.out.println(newPassword);
+                admin newAdmin = new admin();
+
+                if (newPassword == null || newUsername == null) {
+                    JOptionPane.showMessageDialog(null, "输入错误");
+                } else {
+                    try {
+                        newAdmin.setUsername(newUsername);
+                        newAdmin.setPassword(newPassword);
+                        adminMgr.createAdmin(dbLink.getConnection(), newAdmin);
+
+                        JOptionPane.showConfirmDialog(null, "创建成功");
+                    } catch (Exception eeee) {
+                        eeee.printStackTrace();
                     }
-                } catch (Exception ee) {
-                    ee.printStackTrace();
                 }
+
             }
+
+
+        });
+
+        editPasswdBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                super.mousePressed(e);
+            }
+        });
+        editPasswdBtn.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                String newPasswd = new String();
+
+                String oldPasswd = new String();
+
+                oldPasswd = (String) JOptionPane.showInputDialog(null, "输入旧密码", "输入旧密码", JOptionPane.QUESTION_MESSAGE);
+
+
+               /* if (oldPasswd != administrator.getPassword().toString()) {
+                    JOptionPane.showMessageDialog(null, "旧密码输入错误，修改错误");
+                } else {
+                 */
+               newPasswd = (String) JOptionPane.showInputDialog(null, "输入新密码", "输入新密码", JOptionPane.QUESTION_MESSAGE);
+
+                    try {
+
+                        adminMgr.adminEditPassword(dbLink.getConnection(), administrator.getUsername(), newPasswd);
+                        JOptionPane.showMessageDialog(null, "密码修改成功");
+
+
+                    } catch (Exception eeeee) {
+                        eeeee.printStackTrace();
+                    }
+                }
+
+
         });
     }
 
@@ -538,7 +695,6 @@ public class contacts {
 
 
     }
-
 
 
     {
@@ -868,18 +1024,57 @@ public class contacts {
         userPane = new JPanel();
         userPane.setLayout(new BorderLayout(0, 0));
         modifyTabbedPane.addTab("用户", userPane);
-        btnPane2 = new JPanel();
-        btnPane2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-        userPane.add(btnPane2, BorderLayout.SOUTH);
-        editProfileBtn = new JButton();
-        editProfileBtn.setText("修改密码");
-        btnPane2.add(editProfileBtn);
-        userInfoPane = new JScrollPane();
-        userPane.add(userInfoPane, BorderLayout.NORTH);
-        userInfoPane.setBorder(BorderFactory.createTitledBorder(null, "用户信息", TitledBorder.DEFAULT_JUSTIFICATION, TitledBorder.DEFAULT_POSITION, null, new Color(-16777216)));
-        infoTable = new JTable();
-        infoTable.setSelectionForeground(new Color(-1250068));
-        userInfoPane.setViewportView(infoTable);
+        userCtrlPane = new JPanel();
+        userCtrlPane.setLayout(new GridBagLayout());
+        userPane.add(userCtrlPane, BorderLayout.CENTER);
+        deletUserBtn = new JButton();
+        deletUserBtn.setText("删除用户");
+        deletUserBtn.setVisible(false);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        gbc.gridwidth = 2;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        userCtrlPane.add(deletUserBtn, gbc);
+        editPasswdBtn = new JButton();
+        editPasswdBtn.setHorizontalAlignment(0);
+        editPasswdBtn.setText("修改密码");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.NORTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        userCtrlPane.add(editPasswdBtn, gbc);
+        createUserBtn = new JButton();
+        createUserBtn.setHorizontalTextPosition(0);
+        createUserBtn.setText("创建用戶");
+        createUserBtn.putClientProperty("hideActionText", Boolean.FALSE);
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        gbc.gridwidth = 2;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.anchor = GridBagConstraints.SOUTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        userCtrlPane.add(createUserBtn, gbc);
+        final JLabel label1 = new JLabel();
+        label1.setText("用户名");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        userCtrlPane.add(label1, gbc);
+        usrLbl = new JLabel();
+        usrLbl.setText("Label");
+        gbc = new GridBagConstraints();
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.EAST;
+        userCtrlPane.add(usrLbl, gbc);
         bottomPane = new JPanel();
         bottomPane.setLayout(new BorderLayout(0, 0));
         panel1.add(bottomPane, BorderLayout.SOUTH);
@@ -889,9 +1084,9 @@ public class contacts {
         ex2csvBtn = new JButton();
         ex2csvBtn.setText("输出 CSV");
         ctrlPanel.add(ex2csvBtn);
-        savBtn = new JButton();
-        savBtn.setText("保存通讯录");
-        ctrlPanel.add(savBtn);
+        dbSaveBtn = new JButton();
+        dbSaveBtn.setText("保存通讯录");
+        ctrlPanel.add(dbSaveBtn);
         StatPane = new JPanel();
         StatPane.setLayout(new GridBagLayout());
         bottomPane.add(StatPane, BorderLayout.WEST);

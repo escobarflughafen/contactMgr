@@ -27,11 +27,13 @@ public class loginUtil {
     }
 
     public int createAdmin(Connection con, admin newAdmin) throws Exception{
-        String sql = "insert into t_user values ()";
+        String sql = "insert into t_user values (?,?)";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setString(1,newAdmin.getUsername());
         pstmt.setString(2,newAdmin.getPassword());
 
+
+        System.out.println("created new admin");
         return pstmt.executeUpdate();
     }
 
@@ -40,16 +42,17 @@ public class loginUtil {
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setString(1,user.getUsername());
         pstmt.setString(2,user.getPassword());
-
+        System.out.println("deleted admin");
         return pstmt.executeUpdate();
     }
 
-    public int adminEditPassword(Connection con, admin user) throws Exception{
+    public int adminEditPassword(Connection con, String username, String newPassword) throws Exception{
+
         String sql = "update t_user set username = ? where password = ?";
         PreparedStatement pstmt = con.prepareStatement(sql);
-        pstmt.setString(1,user.getUsername());
-        pstmt.setString(2,user.getPassword());
-
+        pstmt.setString(1,username);
+        pstmt.setString(2,newPassword);
+        System.out.println("passwd edited");
         return pstmt.executeUpdate();
     }
 

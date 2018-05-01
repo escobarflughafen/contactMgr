@@ -75,10 +75,13 @@ public class memberUtil {
             count += istmt.executeUpdate();
         }
         if (count == contacts.size()){
+            System.out.println("Database updated");
             return true;
         }
 
+        System.out.println("Failed to update database");
         return false;
+
     }
 
 }

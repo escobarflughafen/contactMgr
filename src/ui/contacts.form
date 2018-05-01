@@ -443,34 +443,64 @@
                     <properties/>
                     <border type="none"/>
                     <children>
-                      <grid id="734f6" binding="btnPane2" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
-                        <constraints border-constraint="South"/>
+                      <grid id="734f6" binding="userCtrlPane" layout-manager="GridBagLayout">
+                        <constraints border-constraint="Center"/>
                         <properties/>
                         <border type="none"/>
                         <children>
-                          <component id="7bf1c" class="javax.swing.JButton" binding="editProfileBtn">
-                            <constraints/>
+                          <component id="325a7" class="javax.swing.JButton" binding="deletUserBtn">
+                            <constraints>
+                              <grid row="3" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                              <gridbag weightx="0.0" weighty="0.0"/>
+                            </constraints>
                             <properties>
+                              <text value="删除用户"/>
+                              <visible value="false"/>
+                            </properties>
+                          </component>
+                          <component id="df9e6" class="javax.swing.JButton" binding="editPasswdBtn">
+                            <constraints>
+                              <grid row="1" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="3" anchor="1" fill="1" indent="0" use-parent-layout="false"/>
+                              <gridbag weightx="1.0" weighty="1.0"/>
+                            </constraints>
+                            <properties>
+                              <horizontalAlignment value="0"/>
                               <text value="修改密码"/>
+                            </properties>
+                          </component>
+                          <component id="92e8c" class="javax.swing.JButton" binding="createUserBtn">
+                            <constraints>
+                              <grid row="2" column="0" row-span="1" col-span="2" vsize-policy="3" hsize-policy="3" anchor="2" fill="1" indent="0" use-parent-layout="false"/>
+                              <gridbag weightx="1.0" weighty="1.0"/>
+                            </constraints>
+                            <properties>
+                              <horizontalTextPosition value="0"/>
+                              <text value="创建用戶"/>
+                            </properties>
+                            <clientProperties>
+                              <hideActionText class="java.lang.Boolean" value="false"/>
+                            </clientProperties>
+                          </component>
+                          <component id="82152" class="javax.swing.JLabel">
+                            <constraints>
+                              <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
+                              <gridbag weightx="0.0" weighty="0.0"/>
+                            </constraints>
+                            <properties>
+                              <text value="用户名"/>
+                            </properties>
+                          </component>
+                          <component id="dfeeb" class="javax.swing.JLabel" binding="usrLbl">
+                            <constraints>
+                              <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="4" fill="0" indent="0" use-parent-layout="false"/>
+                              <gridbag weightx="0.0" weighty="0.0"/>
+                            </constraints>
+                            <properties>
+                              <text value="Label"/>
                             </properties>
                           </component>
                         </children>
                       </grid>
-                      <scrollpane id="3a127" binding="userInfoPane">
-                        <constraints border-constraint="North"/>
-                        <properties/>
-                        <border type="none" title="用户信息">
-                          <title-color color="-16777216"/>
-                        </border>
-                        <children>
-                          <component id="3f245" class="javax.swing.JTable" binding="infoTable">
-                            <constraints/>
-                            <properties>
-                              <selectionForeground color="-1250068"/>
-                            </properties>
-                          </component>
-                        </children>
-                      </scrollpane>
                     </children>
                   </grid>
                 </children>
@@ -497,7 +527,7 @@
                   <text value="输出 CSV"/>
                 </properties>
               </component>
-              <component id="6d900" class="javax.swing.JButton" binding="savBtn">
+              <component id="6d900" class="javax.swing.JButton" binding="dbSaveBtn">
                 <constraints/>
                 <properties>
                   <text value="保存通讯录"/>
