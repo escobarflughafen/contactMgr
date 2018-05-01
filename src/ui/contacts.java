@@ -9,11 +9,15 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.util.Date;
 import java.util.Vector;
 
 import utils.revokeStack;
 import utils.csvUtil;
 import utils.contactUtil;
+import utils.dbUtil;
+import utils.memberUtil;
 
 public class contacts {
 
@@ -74,6 +78,7 @@ public class contacts {
     private JLabel contactCountLbl;
     private JPanel westPane;
     private JTree tableTree;
+    private JLabel dbStatus;
 
     //constants
     private int columnCount = 9;
@@ -103,183 +108,192 @@ public class contacts {
     DefaultTableModel infoModel = new DefaultTableModel(colHeaders, 0);
     DefaultTableModel userInfoModel = new DefaultTableModel(userInfoHeaders, 0);
 
+    private dbUtil dbLink = new dbUtil();
+    private memberUtil dbReader = new memberUtil();
+
 
     public contacts(String username) {
-        this.username = username;
-        catalogue.setModel(infoModel);
-        infoTable.setModel(userInfoModel);
-        contactBuilder.setUsername(username);
-        contactBuilder.setUserInfo(userInfoModel);
+        try {
+            Connection con = dbLink.getConnection();
+            this.username = username;
+            catalogue.setModel(infoModel);
+            infoTable.setModel(userInfoModel);
+            contactBuilder.setUsername(username);
+            contactBuilder.setUserInfo(userInfoModel);
+
+            contacts = dbReader.readFromDB(con);
+            contactBuilder.tableRefresh(infoModel, contacts);
+
+            searchPane.setVisible(false);
+            searchStatLbl.setVisible(false);
+            searchResultList.remove(0);
 
 
-        searchPane.setVisible(false);
-        searchStatLbl.setVisible(false);
-        searchResultList.remove(0);
+            contacts = contactBuilder.createAllContactObjects(catalogue);
+            DefaultMutableTreeNode root = new DefaultMutableTreeNode("QG工作室");
+            root.setAllowsChildren(true);
+
+            DefaultMutableTreeNode groupA = new DefaultMutableTreeNode("数据挖掘");
+            DefaultMutableTreeNode groupB = new DefaultMutableTreeNode("嵌入式");
+            DefaultMutableTreeNode groupC = new DefaultMutableTreeNode("前端");
+            DefaultMutableTreeNode groupD = new DefaultMutableTreeNode("后端");
+            DefaultMutableTreeNode groupE = new DefaultMutableTreeNode("手游");
+            DefaultMutableTreeNode groupF = new DefaultMutableTreeNode("设计");
+            root.add(groupA);
+            root.add(groupB);
+            root.add(groupC);
+            root.add(groupD);
+            root.add(groupE);
+            root.add(groupF);
 
 
-        contacts = contactBuilder.createAllContactObjects(catalogue);
-        DefaultMutableTreeNode root = new DefaultMutableTreeNode("QG工作室");
-        root.setAllowsChildren(true);
+            System.out.println(groupA.getParent());
 
-        DefaultMutableTreeNode groupA = new DefaultMutableTreeNode("数据挖掘");
-        DefaultMutableTreeNode groupB = new DefaultMutableTreeNode("嵌入式");
-        DefaultMutableTreeNode groupC = new DefaultMutableTreeNode("前端");
-        DefaultMutableTreeNode groupD = new DefaultMutableTreeNode("后端");
-        DefaultMutableTreeNode groupE = new DefaultMutableTreeNode("手游");
-        DefaultMutableTreeNode groupF = new DefaultMutableTreeNode("设计");
-        root.add(groupA);
-        root.add(groupB);
-        root.add(groupC);
-        root.add(groupD);
-        root.add(groupE);
-        root.add(groupF);
+            DefaultTreeModel tmdl = new DefaultTreeModel(root);
+
+            tableTree.setModel(tmdl);
+
+            JFrame frame = new JFrame("contacts");
+            frame.setContentPane(panel1);
+            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            frame.setMinimumSize(new Dimension(800, 600));
+            frame.pack();
+            frame.setVisible(true);
 
 
-        System.out.println(groupA.getParent());
+            // 搜索框监听器 实时显示搜索内容
+            searchTextField.getDocument().addDocumentListener(new DocumentListener() {
+                @Override
+                public void insertUpdate(DocumentEvent e) {
+                    System.out.println("insertUpdate");
+                    searchResult.removeAllElements();
+                    searchResultIndex.removeAllElements();
+                    //searching
+                    contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
+                    searchStatLbl.setText("共 " + String.valueOf(searchResult.size()) + " 项结果");
 
-        DefaultTreeModel tmdl = new DefaultTreeModel(root);
+                }
 
-        tableTree.setModel(tmdl);
+                @Override
+                public void removeUpdate(DocumentEvent e) {
+                    System.out.println("removeUpdate");
+                    searchResult.removeAllElements();
+                    searchResultIndex.removeAllElements();
+                    //searching
+                    contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
+                    searchStatLbl.setText("共 " + String.valueOf(searchResult.size()) + " 项结果");
+                }
 
-        JFrame frame = new JFrame("contacts");
-        frame.setContentPane(panel1);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setMinimumSize(new Dimension(800, 600));
-        frame.pack();
-        frame.setVisible(true);
+                @Override
+                public void changedUpdate(DocumentEvent e) {
+                    System.out.println("changedUpdate");
+                    searchResult.removeAllElements();
+                    searchResultIndex.removeAllElements();
+                    //searching
+                    contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
+                    searchStatLbl.setText("共 " + String.valueOf(searchResult.size()) + " 项结果");
 
-
-        // 搜索框监听器 实时显示搜索内容
-        searchTextField.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                System.out.println("insertUpdate");
-                searchResult.removeAllElements();
-                searchResultIndex.removeAllElements();
-                //searching
-                contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
-                searchStatLbl.setText("共 " + String.valueOf(searchResult.size()) + " 项结果");
-
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                System.out.println("removeUpdate");
-                searchResult.removeAllElements();
-                searchResultIndex.removeAllElements();
-                //searching
-                contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
-                searchStatLbl.setText("共 " + String.valueOf(searchResult.size()) + " 项结果");
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                System.out.println("changedUpdate");
-                searchResult.removeAllElements();
-                searchResultIndex.removeAllElements();
-                //searching
-                contactBuilder.contactSearch(searchTextField.getText(), contacts, searchResult, searchResultIndex, searchResultList);
-                searchStatLbl.setText("共 " + String.valueOf(searchResult.size()) + " 项结果");
-
-            }
-        });
+                }
+            });
 
 
-        // get (row,col)
-        catalogue.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            @Override
-            public void valueChanged(ListSelectionEvent e) {
+            // get (row,col)
+            catalogue.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+                @Override
+                public void valueChanged(ListSelectionEvent e) {
              /*   selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
                 selectedColumnIdx = catalogue.getSelectedColumn();
 
                 editStatusLbl.setText(String.valueOf(selectedRowIdx) + ", " + String.valueOf(selectedColumnIdx)); */
-                selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
-                selectedColumnIdx = catalogue.getSelectedColumn();
-                contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+                    selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
+                    selectedColumnIdx = catalogue.getSelectedColumn();
+                    contactCountLbl.setText("共 " + contacts.size() + " 条记录");
 
 
-                //  idTextField.setText(infoModel.getValueAt(selectedRowIdx, 0).toString());
+                    //  idTextField.setText(infoModel.getValueAt(selectedRowIdx, 0).toString());
 
-                if (selectedRowIdx >= 0) {
-                    String row[] = new String[columnCount];
-                    Integer classInt = new Integer(5);
+                    if (selectedRowIdx >= 0) {
+                        String row[] = new String[columnCount];
+                        Integer classInt = new Integer(5);
 
-                    for (int i = 0; i < columnCount; i++) {
-                        row[i] = (catalogue.getValueAt(selectedRowIdx, i) == null) ? "" : (catalogue.getValueAt(selectedRowIdx, i).toString());
+                        for (int i = 0; i < columnCount; i++) {
+                            row[i] = (catalogue.getValueAt(selectedRowIdx, i) == null) ? "" : (catalogue.getValueAt(selectedRowIdx, i).toString());
+                        }
+
+
+                        // setting TEXTFIELD texts
+                        idTextField.setText(row[0]);
+                        nameTextField.setText(row[1]);
+
+                        switch (row[2]) {
+                            case "数据挖掘":
+                                groupBox.setSelectedIndex(0);
+                                break;
+                            case "嵌入式":
+                                groupBox.setSelectedIndex(1);
+                                break;
+                            case "前端":
+                                groupBox.setSelectedIndex(2);
+                                break;
+                            case "后端":
+                                groupBox.setSelectedIndex(3);
+                                break;
+                            case "手游":
+                                groupBox.setSelectedIndex(4);
+                                break;
+                            case "设计":
+                                groupBox.setSelectedIndex(5);
+                                break;
+                            default:
+                                groupBox.setSelectedIndex(0);
+                                break;
+                        }
+
+                        switch (row[3]) {
+                            case "大一":
+                                gradeBox.setSelectedIndex(0);
+                                break;
+                            case "大二":
+                                gradeBox.setSelectedIndex(1);
+                                break;
+                            case "大三":
+                                gradeBox.setSelectedIndex(2);
+                                break;
+                            case "大四":
+                                gradeBox.setSelectedIndex(3);
+                                break;
+                            default:
+                                gradeBox.setSelectedIndex(0);
+                                break;
+                        }
+                        ;
+
+                        clasBox.setSelectedIndex((row[4] == "") ? 0 : (Integer.parseInt(row[4]) - 1));
+                        teleNumTextField.setText(row[5]);
+                        emailTextField.setText(row[6]);
+                        dormTextField.setText(row[7]);
+                        addrTextField.setText(row[8]);
+
                     }
-
-
-                    // setting TEXTFIELD texts
-                    idTextField.setText(row[0]);
-                    nameTextField.setText(row[1]);
-
-                    switch (row[2]) {
-                        case "数据挖掘":
-                            groupBox.setSelectedIndex(0);
-                            break;
-                        case "嵌入式":
-                            groupBox.setSelectedIndex(1);
-                            break;
-                        case "前端":
-                            groupBox.setSelectedIndex(2);
-                            break;
-                        case "后端":
-                            groupBox.setSelectedIndex(3);
-                            break;
-                        case "手游":
-                            groupBox.setSelectedIndex(4);
-                            break;
-                        case "设计":
-                            groupBox.setSelectedIndex(5);
-                            break;
-                        default:
-                            groupBox.setSelectedIndex(0);
-                            break;
-                    }
-
-                    switch (row[3]) {
-                        case "大一":
-                            gradeBox.setSelectedIndex(0);
-                            break;
-                        case "大二":
-                            gradeBox.setSelectedIndex(1);
-                            break;
-                        case "大三":
-                            gradeBox.setSelectedIndex(2);
-                            break;
-                        case "大四":
-                            gradeBox.setSelectedIndex(3);
-                            break;
-                        default:
-                            gradeBox.setSelectedIndex(0);
-                            break;
-                    }
-                    ;
-
-                    clasBox.setSelectedIndex((row[4] == "") ? 0 : (Integer.parseInt(row[4]) - 1));
-                    teleNumTextField.setText(row[5]);
-                    emailTextField.setText(row[6]);
-                    dormTextField.setText(row[7]);
-                    addrTextField.setText(row[8]);
-
                 }
-            }
-        });
+            });
 
-        saveBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                if (selectedRowIdx >= 0) {
-                    member memInfo = new member(idTextField.getText(),
-                            nameTextField.getText(),
-                            groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
-                            gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
-                            clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
-                            teleNumTextField.getText(),
-                            emailTextField.getText(),
-                            dormTextField.getText(),
-                            addrTextField.getText());
+            saveBtn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    if (selectedRowIdx >= 0) {
+                        member memInfo = new member(idTextField.getText(),
+                                nameTextField.getText(),
+                                groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
+                                gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
+                                clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
+                                teleNumTextField.getText(),
+                                emailTextField.getText(),
+                                dormTextField.getText(),
+                                addrTextField.getText());
+
+                        isSaved = false;
 
                     /*
                     int tempRowIndex = selectedRowIdx;
@@ -287,22 +301,24 @@ public class contacts {
                     infoModel.insertRow(tempRowIndex, memInfo.getRecord());
                     */
 
+                    }
                 }
-            }
-        });
+            });
 
-        deleteBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                int deletRowIndex = selectedRowIdx;
-                //revokRow = {idTextField.getText(),nameTextField.getText(),groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),}
-                deletStack.enDelet(contacts.remove(deletRowIndex));
-                deletStack.enIndex(deletRowIndex);
-                // contactCountLbl.setText("共 " + contacts.size() + " 条记录");
-                System.out.println(deletStack.toString());
+            deleteBtn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    int deletRowIndex = selectedRowIdx;
+                    //revokRow = {idTextField.getText(),nameTextField.getText(),groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),}
+                    deletStack.enDelet(contacts.remove(deletRowIndex));
+                    deletStack.enIndex(deletRowIndex);
+                    // contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+                    System.out.println(deletStack.toString());
 
-                contactBuilder.tableRefresh(infoModel, contacts);
+                    contactBuilder.tableRefresh(infoModel, contacts);
+                    isSaved = false;
+
 
             /*    if (selectedRowIdx >= 0) {
 
@@ -317,19 +333,19 @@ public class contacts {
                     infoModel.removeRow(selectedRowIdx);
 
                 }*/
-            }
-
-
-        });
-
-        createNewBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                if (saveCount == 0) {
-                    selectedRowIdx = 0;
-                    selectedColumnIdx = 0;
                 }
+
+
+            });
+
+            createNewBtn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    if (saveCount == 0) {
+                        selectedRowIdx = 0;
+                        selectedColumnIdx = 0;
+                    }
                 /*
                 String[] emptyRow = {""};
                 infoModel.insertRow((selectedRowIdx == 0 && rowCount == 0) ? selectedRowIdx : selectedRowIdx + 1, emptyRow); // 插入空表：插入非空表
@@ -337,35 +353,35 @@ public class contacts {
                 *
                 */
 
-                int recRow = selectedRowIdx;
-
-                contacts.insertElementAt(new member("", "", "", "", "", "", "", "", ""), selectedRowIdx);
-                // contactCountLbl.setText("共 " + contacts.size() + " 条记录");
-                contactBuilder.swapMember(contacts, selectedRowIdx, selectedRowIdx + 1);
-                contactBuilder.tableRefresh(infoModel, contacts);
-                selectedRowIdx = recRow + 1;  // move pointer to the created row
-                saveCount++;
-                isSaved = false;
-
-            }
-        });
-
-        saveBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                if (selectedRowIdx >= 0) {
                     int recRow = selectedRowIdx;
-                    int recCol = selectedColumnIdx;
-                    member memInfo = new member(idTextField.getText(),
-                            nameTextField.getText(),
-                            groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
-                            gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
-                            clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
-                            teleNumTextField.getText(),
-                            emailTextField.getText(),
-                            dormTextField.getText(),
-                            addrTextField.getText());
+
+                    contacts.insertElementAt(new member("", "", "", "", "", "", "", "", ""), selectedRowIdx);
+                    // contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+                    contactBuilder.swapMember(contacts, selectedRowIdx, selectedRowIdx + 1);
+                    contactBuilder.tableRefresh(infoModel, contacts);
+                    selectedRowIdx = recRow + 1;  // move pointer to the created row
+                    saveCount++;
+                    isSaved = false;
+
+                }
+            });
+
+            saveBtn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    if (selectedRowIdx >= 0) {
+                        int recRow = selectedRowIdx;
+                        int recCol = selectedColumnIdx;
+                        member memInfo = new member(idTextField.getText(),
+                                nameTextField.getText(),
+                                groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
+                                gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
+                                clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
+                                teleNumTextField.getText(),
+                                emailTextField.getText(),
+                                dormTextField.getText(),
+                                addrTextField.getText());
                     /*
                     memInfo.setId(idTextField.getText());
                     memInfo.setName(nameTextField.getText());
@@ -377,113 +393,138 @@ public class contacts {
                     memInfo.setDormitory(dormTextField.getText());
                     memInfo.setAddress(addrTextField.getText());
                     */
-                    contacts.remove(selectedRowIdx);
-                    contacts.insertElementAt(memInfo, selectedRowIdx);
+                        contacts.remove(selectedRowIdx);
+                        contacts.insertElementAt(memInfo, selectedRowIdx);
+                        contactBuilder.tableRefresh(infoModel, contacts);
+
+                        selectedColumnIdx = recCol;
+                        selectedRowIdx = recRow;
+
+                        isSaved = false;
+
+
+                    }
+                }
+            });
+
+            revokeDeleteBtn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    //infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
+                    int revkIndex = deletStack.popIndex();
+                    contacts.insertElementAt(deletStack.popRevoke(), revkIndex);
+                    // contactCountLbl.setText("共 " + contacts.size() + " 条记录");
                     contactBuilder.tableRefresh(infoModel, contacts);
-
-                    selectedColumnIdx = recCol;
-                    selectedRowIdx = recRow;
-
                     isSaved = false;
 
+
+
                 }
-            }
-        });
+            });
+            ex2csvBtn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    Date dt = new Date();
+                    super.mousePressed(e);
+                    csvUtil csvMaker = new csvUtil(dt.toString() + ".csv", catalogue);
+                    csvMaker.tabletoCSV();
 
-        revokeDeleteBtn.addMouseListener(new MouseAdapter() {
+                }
+            });
+
+
+            catalogue.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    super.mouseClicked(e);
+                    // selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
+                    //   selectedColumnIdx = catalogue.getSelectedColumn();
+
+                    //   editStatusLbl.setText(String.valueOf(selectedRowIdx) + ", " + String.valueOf(selectedColumnIdx));
+                }
+            });
+
+
+            catalogue.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
+                    selectedColumnIdx = catalogue.getSelectedColumn();
+
+                    editStatusLbl.setText(String.valueOf(selectedRowIdx) + ", " + String.valueOf(selectedColumnIdx));
+                    contactCountLbl.setText("共 " + contacts.size() + " 条记录");
+                    contacts = contactBuilder.createAllContactObjects(catalogue);
+                }
+            });
+
+
+            searchTextField.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    searchPane.setVisible(true);
+                    searchStatLbl.setVisible(true);
+                    contacts = contactBuilder.createAllContactObjects(catalogue);
+
+                }
+            });
+            searchResultList.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    super.mouseExited(e);
+
+                }
+            });
+            searchResultList.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    super.mouseReleased(e);
+                    int index = searchResultIndex.get(searchResultList.getSelectedIndex());
+                    catalogue.setRowSelectionInterval(index, index);
+                    searchResultList.removeAll();
+                    searchResult.removeAllElements();
+                    searchResultIndex.removeAllElements();
+                    searchPane.setVisible(false);
+                    searchStatLbl.setVisible(false);
+                }
+            });
+
+
+            searchTextField.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    super.keyPressed(e);
+                }
+            });
+            catalogTextSizeSpin.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    super.mousePressed(e);
+                    //catalogue.setFont(new Font("courier", Font.PLAIN, Integer.valueOf(catalogTextSizeSpin.getValue().toString())));
+
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        savBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                //infoModel.insertRow(deletStack.popIndex(), deletStack.popRevoke());
-                int revkIndex = deletStack.popIndex();
-                contacts.insertElementAt(deletStack.popRevoke(), revkIndex);
-                // contactCountLbl.setText("共 " + contacts.size() + " 条记录");
-                contactBuilder.tableRefresh(infoModel, contacts);
-
-
-            }
-        });
-        ex2csvBtn.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                csvUtil csvMaker = new csvUtil("t01.csv", catalogue);
-                csvMaker.tabletoCSV();
-
-            }
-        });
-
-
-        catalogue.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                // selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
-                //   selectedColumnIdx = catalogue.getSelectedColumn();
-
-                //   editStatusLbl.setText(String.valueOf(selectedRowIdx) + ", " + String.valueOf(selectedColumnIdx));
-            }
-        });
-
-
-        catalogue.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                selectedRowIdx = catalogue.getSelectedRow(); // get index of selected ROW
-                selectedColumnIdx = catalogue.getSelectedColumn();
-
-                editStatusLbl.setText(String.valueOf(selectedRowIdx) + ", " + String.valueOf(selectedColumnIdx));
-                contactCountLbl.setText("共 " + contacts.size() + " 条记录");
-                contacts = contactBuilder.createAllContactObjects(catalogue);
-            }
-        });
-
-
-        searchTextField.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                searchPane.setVisible(true);
-                searchStatLbl.setVisible(true);
-                contacts = contactBuilder.createAllContactObjects(catalogue);
-
-            }
-        });
-        searchResultList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                super.mouseExited(e);
-
-            }
-        });
-        searchResultList.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                super.mouseReleased(e);
-                int index = searchResultIndex.get(searchResultList.getSelectedIndex());
-                catalogue.setRowSelectionInterval(index, index);
-                searchResultList.removeAll();
-                searchResult.removeAllElements();
-                searchResultIndex.removeAllElements();
-                searchPane.setVisible(false);
-                searchStatLbl.setVisible(false);
-            }
-        });
-
-
-        searchTextField.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyPressed(KeyEvent e) {
-                super.keyPressed(e);
-            }
-        });
-        catalogTextSizeSpin.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent e) {
-                super.mousePressed(e);
-                //catalogue.setFont(new Font("courier", Font.PLAIN, Integer.valueOf(catalogTextSizeSpin.getValue().toString())));
-
+                try {
+                    super.mousePressed(e);
+                    boolean status = dbReader.saveDB(contacts, dbLink.getConnection());
+                    if (status) {
+                        isSaved = false;
+                    } else {
+                        isSaved = true;
+                    }
+                } catch (Exception ee) {
+                    ee.printStackTrace();
+                }
             }
         });
     }
@@ -497,6 +538,8 @@ public class contacts {
 
 
     }
+
+
 
     {
 // GUI initializer generated by IntelliJ IDEA GUI Designer

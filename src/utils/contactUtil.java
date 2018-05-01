@@ -16,6 +16,8 @@ import javax.swing.tree.TreeModel;
 import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
 import utils.revokeStack;
 import java.util.regex.*;
+import utils.memberUtil;
+import utils.dbUtil;
 
 
 
@@ -23,13 +25,21 @@ public class contactUtil {
     // use stack to save deleted rows
     private String database;
     private String username;
+    private dbUtil dbLink = new dbUtil();
 
 
 
     public contactUtil(){
+        try {
+            Connection con = dbLink.getConnection();
 
+        } catch (Exception e){
+            e.printStackTrace();
+        }
 
     }
+
+
 
 
     public String getOne(){
@@ -195,6 +205,8 @@ public class contactUtil {
 
         return true;
     }
+
+
 
 
 
