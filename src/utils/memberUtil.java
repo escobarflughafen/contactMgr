@@ -13,6 +13,15 @@ import java.util.Vector;
 
 public class memberUtil {
 
+    public boolean memberIDChk(Vector<member> contacts, member newMember){
+        for(int i = 0; i < contacts.size(); i++){
+            if( newMember.getId().equals(contacts.get(i).getId())){
+                return false; // ID is not unique
+            }
+        }
+        return true; // ID is unique.
+    }
+
     public member dbStringToMem(String queryStr){
         String[] queryArr = queryStr.split("|");
         member newContact = new member( queryArr[0],
@@ -35,7 +44,6 @@ public class memberUtil {
 
         ResultSet rs = pstmt.executeQuery();
 
-
         while (rs.next()) {
             contacts.add(new member(rs.getString("id"),
                                     rs.getString("name"),
@@ -50,6 +58,8 @@ public class memberUtil {
         return contacts;
 
     }
+
+
 
     public boolean saveDB(Vector<member> contacts, Connection conn) throws Exception{
         String truncate = "truncate table t_members";
@@ -83,5 +93,7 @@ public class memberUtil {
         return false;
 
     }
+
+
 
 }

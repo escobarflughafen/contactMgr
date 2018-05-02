@@ -348,32 +348,7 @@ public class contacts {
                 }
             });
 
-            saveBtn.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    super.mouseClicked(e);
-                    if (selectedRowIdx >= 0) {
-                        member memInfo = new member(idTextField.getText(),
-                                nameTextField.getText(),
-                                groupBox.getItemAt(groupBox.getSelectedIndex()).toString(),
-                                gradeBox.getItemAt(gradeBox.getSelectedIndex()).toString(),
-                                clasBox.getItemAt(clasBox.getSelectedIndex()).toString(),
-                                teleNumTextField.getText(),
-                                emailTextField.getText(),
-                                dormTextField.getText(),
-                                addrTextField.getText());
 
-                        isSaved = false;
-
-                    /*
-                    int tempRowIndex = selectedRowIdx;
-                    infoModel.removeRow(tempRowIndex);
-                    infoModel.insertRow(tempRowIndex, memInfo.getRecord());
-                    */
-
-                    }
-                }
-            });
 
             deleteBtn.addMouseListener(new MouseAdapter() {
                 @Override
@@ -387,6 +362,7 @@ public class contacts {
                     System.out.println(deletStack.toString());
 
                     contactBuilder.tableRefresh(infoModel, contacts);
+                    selectedRowIdx = (deletRowIndex == 0) ? 0 : (deletRowIndex - 1);
                     isSaved = false;
                     frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
 
@@ -465,15 +441,24 @@ public class contacts {
                     memInfo.setDormitory(dormTextField.getText());
                     memInfo.setAddress(addrTextField.getText());
                     */
-                        contacts.remove(selectedRowIdx);
-                        contacts.insertElementAt(memInfo, selectedRowIdx);
-                        contactBuilder.tableRefresh(infoModel, contacts);
+                        if (dbReader.memberIDChk(contacts, memInfo)) {
 
-                        selectedColumnIdx = recCol;
-                        selectedRowIdx = recRow;
+                            contacts.remove(selectedRowIdx);
+                            contacts.insertElementAt(memInfo, selectedRowIdx);
+                            contactBuilder.tableRefresh(infoModel, contacts);
 
-                        isSaved = false;
-                        frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
+                            selectedColumnIdx = recCol;
+                            selectedRowIdx = recRow;
+
+                            isSaved = false;
+                            frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
+
+                        } else {
+
+                            JOptionPane.showMessageDialog(null, "错误：通讯录成员 ID 重复");
+
+                        }
+
 
                     }
                 }
@@ -490,6 +475,7 @@ public class contacts {
                     contactBuilder.tableRefresh(infoModel, contacts);
                     isSaved = false;
                     frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
+                    selectedRowIdx = revkIndex;
 
 
                 }
@@ -669,18 +655,18 @@ public class contacts {
                     JOptionPane.showMessageDialog(null, "旧密码输入错误，修改错误");
                 } else {
                  */
-               newPasswd = (String) JOptionPane.showInputDialog(null, "输入新密码", "输入新密码", JOptionPane.QUESTION_MESSAGE);
+                newPasswd = (String) JOptionPane.showInputDialog(null, "输入新密码", "输入新密码", JOptionPane.QUESTION_MESSAGE);
 
-                    try {
+                try {
 
-                        adminMgr.adminEditPassword(dbLink.getConnection(), administrator.getUsername(), newPasswd);
-                        JOptionPane.showMessageDialog(null, "密码修改成功");
+                    adminMgr.adminEditPassword(dbLink.getConnection(), administrator.getUsername(), newPasswd);
+                    JOptionPane.showMessageDialog(null, "密码修改成功");
 
 
-                    } catch (Exception eeeee) {
-                        eeeee.printStackTrace();
-                    }
+                } catch (Exception eeeee) {
+                    eeeee.printStackTrace();
                 }
+            }
 
 
         });
