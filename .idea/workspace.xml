@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d6945baf-d3b2-438f-9272-ad16a81d24f4" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/ui/contacts.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/contacts.java" afterDir="false" />
-    </list>
+    <list default="true" id="d6945baf-d3b2-438f-9272-ad16a81d24f4" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -102,8 +100,8 @@
       <file leaf-file-name="contacts.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/ui/contacts.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="715" column="67" lean-forward="true" selection-start-line="715" selection-start-column="67" selection-end-line="715" selection-end-column="67" />
+            <state relative-caret-position="354">
+              <caret line="717" column="90" selection-start-line="717" selection-start-column="90" selection-end-line="717" selection-end-column="90" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="initializer##0;class#contacts#0" expanded="true" />
@@ -861,8 +859,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/ui/contacts.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="715" column="67" lean-forward="true" selection-start-line="715" selection-start-column="67" selection-end-line="715" selection-end-column="67" />
+        <state relative-caret-position="354">
+          <caret line="717" column="90" selection-start-line="717" selection-start-column="90" selection-end-line="717" selection-end-column="90" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="initializer##0;class#contacts#0" expanded="true" />
