@@ -475,7 +475,7 @@
                             </constraints>
                             <properties>
                               <horizontalTextPosition value="0"/>
-                              <text value="用户设置"/>
+                              <text value="用戶管理"/>
                             </properties>
                             <clientProperties>
                               <hideActionText class="java.lang.Boolean" value="false"/>
@@ -487,7 +487,7 @@
                               <gridbag weightx="0.0" weighty="0.0"/>
                             </constraints>
                             <properties>
-                              <text value="用户名"/>
+                              <text value="用戶名"/>
                             </properties>
                           </component>
                           <component id="dfeeb" class="javax.swing.JLabel" binding="usrLbl">

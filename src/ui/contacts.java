@@ -599,73 +599,95 @@ public class contacts {
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
 
-                Object[] msgOptions = {"创建用户", "删除用户"};
-                int option = JOptionPane.showOptionDialog(null, "选择操作", "用户设置", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, msgOptions, 0);
-                if (option == 0) {
-                    //create new admin
-                    Object[] msgCreateNewUser = {"用户名", "密码", "确认密码"}; // 用户的选择项
-                    String newUsername = new String();
-                    newUsername = JOptionPane.showInputDialog(null, msgCreateNewUser[0], "用户名", JOptionPane.QUESTION_MESSAGE);
-                    String newPassword = new String();
-                    newPassword = JOptionPane.showInputDialog(null, msgCreateNewUser[1], "密码", JOptionPane.QUESTION_MESSAGE);
-                    String newPasswdAgain = new String();
-                    newPasswdAgain = JOptionPane.showInputDialog(null, msgCreateNewUser[2], "确认密码", JOptionPane.QUESTION_MESSAGE);
-                    admin newAdmin = new admin();
+                Object[] msgOptions = {"创建用戶", "删除用戶"};
+                int option = JOptionPane.showOptionDialog(null, "选择操作", "用戶设置", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, msgOptions, 0);
 
-                    if (newPassword.equals("") || newUsername.equals("") || newPasswdAgain.equals("")) {
-                        JOptionPane.showMessageDialog(null, "输入错误");
-                    } else {
-                        if (!newPasswdAgain.equals(newPassword)) {
-                            JOptionPane.showMessageDialog(null, "两次输入密码不一致");
+                try {
+                    Vector<admin> users = adminMgr.getUsers(dbLink.getConnection());
+                    Vector<String> usernames = new Vector<>();
 
-                        } else {
+                    for (int i = 0; i < users.size(); i++) {
+                        usernames.add(users.get(i).getUsername());
+                    }
 
-                            try {
-                                newAdmin.setUsername(newUsername);
-                                newAdmin.setPassword(newPassword);
-                                adminMgr.createAdmin(dbLink.getConnection(), newAdmin);
-
-                                JOptionPane.showConfirmDialog(null, "创建成功", "", JOptionPane.YES_OPTION);
-                            } catch (Exception eeee) {
-                                JOptionPane.showConfirmDialog(null, "创建失败", "", JOptionPane.YES_OPTION);
-                                eeee.printStackTrace();
+                    //add NEW ADMIN
+                    if (option == 0) {
+                        //create new admin
+                        Object[] msgCreateNewUser = {"用戶名", "密码", "确认密码"}; // 用戶的选择项
+                        String newUsername = new String();
+                        newUsername = JOptionPane.showInputDialog(null, msgCreateNewUser[0], "用戶名", JOptionPane.QUESTION_MESSAGE);
+                        boolean isExist = false;
+                        for (int i = 0; i < users.size(); i++) {
+                            if (usernames.get(i).equals(newUsername)) {
+                                isExist = true;
                             }
                         }
-                    }
-                }
-                if (option == 1) {
-                    try {
+                        if (!isExist) {
+                            String newPassword = new String();
+                            newPassword = JOptionPane.showInputDialog(null, msgCreateNewUser[1], "创建用戶", JOptionPane.QUESTION_MESSAGE);
+                            String newPasswdAgain = new String();
+                            newPasswdAgain = JOptionPane.showInputDialog(null, msgCreateNewUser[2], "创建用戶", JOptionPane.QUESTION_MESSAGE);
+                            admin newAdmin = new admin();
 
-                        Vector<admin> users = adminMgr.getUsers(dbLink.getConnection());
+                            if (newPassword.equals("") || newUsername.equals("") || newPasswdAgain.equals("")) {
+                                JOptionPane.showMessageDialog(null, "输入错误", "创建用戶", JOptionPane.PLAIN_MESSAGE);
+                            } else {
+                                if (!newPasswdAgain.equals(newPassword)) {
+                                    JOptionPane.showMessageDialog(null, "两次输入密码不一致", "创建用戶", JOptionPane.PLAIN_MESSAGE);
 
-                        // init username array
-                        Vector<String> usernames = new Vector<>();
+                                } else {
 
-                        for (int i = 0; i < users.size(); i++) {
-                            usernames.add(users.get(i).getUsername());
-                        }
+                                    try {
+                                        newAdmin.setUsername(newUsername);
+                                        newAdmin.setPassword(newPassword);
+                                        adminMgr.createAdmin(dbLink.getConnection(), newAdmin);
 
-                        int userIndex = JOptionPane.showOptionDialog(null, "选择要删除的用户", "选择用户", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, usernames.toArray(), 0);
-
-                        String password = JOptionPane.showInputDialog("输入 " + usernames.get(userIndex) + " 的密码");
-
-                        if (password.equals(users.get(userIndex).getPassword())) {
-
-                            adminMgr.deleteAdmin(dbLink.getConnection(), users.get(userIndex));
-                            JOptionPane.showMessageDialog(null, "用户 " + usernames.get(userIndex) + " 已删除", "用户删除", JOptionPane.PLAIN_MESSAGE);
-
-
+                                        JOptionPane.showConfirmDialog(null, "创建成功", "创建用戶", JOptionPane.PLAIN_MESSAGE);
+                                    } catch (Exception eeee) {
+                                        JOptionPane.showConfirmDialog(null, "创建失败", "创建用戶", JOptionPane.PLAIN_MESSAGE);
+                                        eeee.printStackTrace();
+                                    }
+                                }
+                            }
                         } else {
-                            JOptionPane.showMessageDialog(null, "用户 " + usernames.get(userIndex) + " 删除失败" + ": 密码错误", "用户删除", JOptionPane.PLAIN_MESSAGE);
+                            JOptionPane.showConfirmDialog(null, "用戶名重复，创建失败", "创建用戶", JOptionPane.PLAIN_MESSAGE);
                         }
 
-
-                    } catch (Exception eeeeee) {
-                        System.out.println("ERROR: cannot modify administrators");
-                        eeeeee.printStackTrace();
                     }
 
+                    //delete EXISTED ADMIN
+                    if (option == 1) {
+                        try {
+
+                            // init username array
+
+
+                            int userIndex = JOptionPane.showOptionDialog(null, "选择要删除的用戶", "删除用戶", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, usernames.toArray(), 0);
+
+                            String password = JOptionPane.showInputDialog("输入 " + usernames.get(userIndex) + " 的密码");
+
+                            if (password.equals(users.get(userIndex).getPassword())) {
+
+                                adminMgr.deleteAdmin(dbLink.getConnection(), users.get(userIndex));
+                                JOptionPane.showMessageDialog(null, "用戶 " + usernames.get(userIndex) + " 已删除", "删除用戶", JOptionPane.PLAIN_MESSAGE);
+
+
+                            } else {
+                                JOptionPane.showMessageDialog(null, "用戶 " + usernames.get(userIndex) + " 删除失败" + ": 密码错误", "删除用戶", JOptionPane.PLAIN_MESSAGE);
+                            }
+
+
+                        } catch (Exception eeeeee) {
+                            System.out.println("ERROR: cannot modify administrators");
+                            eeeeee.printStackTrace();
+                        }
+
+                    }
+                } catch (Exception eeeeeeee) {
+                    eeeeeeee.printStackTrace();
                 }
+
+
             }
 
 
@@ -1078,7 +1100,7 @@ public class contacts {
         userCtrlPane.add(editPasswdBtn, gbc);
         userSettingsBtn = new JButton();
         userSettingsBtn.setHorizontalTextPosition(0);
-        userSettingsBtn.setText("用户设置");
+        userSettingsBtn.setText("用戶管理");
         userSettingsBtn.putClientProperty("hideActionText", Boolean.FALSE);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
@@ -1090,7 +1112,7 @@ public class contacts {
         gbc.fill = GridBagConstraints.HORIZONTAL;
         userCtrlPane.add(userSettingsBtn, gbc);
         final JLabel label1 = new JLabel();
-        label1.setText("用户名");
+        label1.setText("用戶名");
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
