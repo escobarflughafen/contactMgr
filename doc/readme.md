@@ -5,17 +5,21 @@
 
 * classes
     * admin
-        定义用户类
+      
+    定义用户类
 
     * member
-        定义通讯录成员类
+    
+    定义通讯录成员类
 
 * ui
     * login
-        登录界面
+    
+    登录界面
 
     * contact
-        通讯录管理界面
+
+    通讯录管理界面
         * 通讯录表 
         * 成员信息修改区
         * 账户管理区
@@ -67,5 +71,50 @@
     (ID)|(姓名) |(方向) |(年级) |(班级) |(电话号码) |(电邮) |(宿舍)     |(住址)
 
 
-## 
+## 程序示例
+
+    * 登录
+    ![login]("images/login.png")
+
+    * 初始界面
+    ![startup]("images/startup.png")
+
+    * 搜索界面
+    ![search]("images/search.png")
+
+    * 用户管理界面
+    ![adminModify]("images/adminModify.png")
+
+        * 用戶管理
+          ![OptionSelect]("images/optSelect.png")
+        
+            * 新建用户
+            ![addUserDialog]("images/addUserDiag.png")
+
+            * 删除用户
+            ![deleteUser01]("images/deleteUserDiag01.png")
+            ![deleteUser02]("images/deleteUserDiag02.png")
+
+                * 若密码输入错误
+                ![deleteUserError]("images/deleteUserDiag03.png")
+
+                * 删除成功
+                ![deleteUserSuccess]("images/deleteUserDiag04.png")
+        
+        * 修改已登录用户密码
+        ![inputOPasswd]("images/resetPassword01.png")
+        ![inputNPasswd]("images/resetPassword03.png")
+        
+            *若旧密码输入错误
+            ![OPasswdError]("images/resetPassword02.png")
+            
+            *修改成功
+            ![SUCCESS]("images/resetPassword04.png")
+        
+
+    * csv 输出
+    ![csvOutput]("images/csvOutput.png")
+
+    * 退出确认（未保存）
+    ![exitConfirm]("images/exitConfirm.png")
 

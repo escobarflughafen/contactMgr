@@ -709,18 +709,18 @@ public class contacts {
 
                 String oldPasswd = new String();
 
-                oldPasswd = (String) JOptionPane.showInputDialog(null, "输入旧密码", "输入旧密码", JOptionPane.QUESTION_MESSAGE);
+                oldPasswd = (String) JOptionPane.showInputDialog(null, "输入旧密码", "修改密码", JOptionPane.QUESTION_MESSAGE);
 
 
                 if (!oldPasswd.equals(administrator.getPassword().toString())) {
-                    JOptionPane.showMessageDialog(null, "旧密码输入错误，修改错误");
+                    JOptionPane.showMessageDialog(null, "旧密码输入错误，修改失败", "修改密码", JOptionPane.PLAIN_MESSAGE);
                 } else {
                     newPasswd = (String) JOptionPane.showInputDialog(null, "输入新密码", "输入新密码", JOptionPane.QUESTION_MESSAGE);
 
                     try {
 
                         adminMgr.adminEditPassword(dbLink.getConnection(), administrator.getUsername(), newPasswd);
-                        JOptionPane.showMessageDialog(null, "密码修改成功");
+                        JOptionPane.showMessageDialog(null, "密码修改成功", "修改密码", JOptionPane.PLAIN_MESSAGE);
 
 
                     } catch (Exception eeeee) {
