@@ -74,42 +74,56 @@
 ## 程序示例
 
 * 登录
+
 ![login](images/login.png)
    
 * 初始界面   
+    
 ![startup](images/startup.png)
 
     * 搜索界面
-![search](images/search.png)
+    
+    ![search](images/search.png)
 
     * 用户管理界面
-![adminModify](images/adminModify.png)
+    
+    ![adminModify](images/adminModify.png)
     
     * 用戶管理  
-![OptionSelect](images/optSelect.png)
+    
+    ![OptionSelect](images/optSelect.png)
         
     * 新建用户
-![addUserDialog](images/addUserDiag.png)
+    
+    ![addUserDialog](images/addUserDiag.png)
 
     * 删除用户
-![deleteUser01](images/deleteUserDiag01.png)
-![deleteUser02](images/deleteUserDiag02.png)
+    
+    ![deleteUser01](images/deleteUserDiag01.png)
+    
+    ![deleteUser02](images/deleteUserDiag02.png)
 
     * 若密码输入错误
-![deleteUserError](images/deleteUserDiag03.png)
+    
+    ![deleteUserError](images/deleteUserDiag03.png)
 
     * 删除成功
-![deleteUserSuccess](images/deleteUserDiag04.png)
+    
+    ![deleteUserSuccess](images/deleteUserDiag04.png)
         
     * 修改已登录用户密码
-![inputOPasswd](images/resetPassword01.png)
-![inputNPasswd](images/resetPassword03.png)
+    
+    ![inputOPasswd](images/resetPassword01.png)
+    
+    ![inputNPasswd](images/resetPassword03.png)
         
     *若旧密码输入错误
-![OPasswdError](images/resetPassword02.png)
+    
+    ![OPasswdError](images/resetPassword02.png)
             
     *修改成功
-![SUCCESS](images/resetPassword04.png)
+    
+    ![SUCCESS](images/resetPassword04.png)
         
 
     * csv 输出
