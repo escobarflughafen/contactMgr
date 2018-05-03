@@ -5,8 +5,10 @@ import classes.admin;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Vector;
+import java.util.concurrent.ExecutionException;
 
-public class loginUtil {
+public class adminUtil {
 
     public boolean login(Connection conn, admin user) throws Exception{
         admin loginAdmin = null;
@@ -42,8 +44,17 @@ public class loginUtil {
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setString(1,user.getUsername());
         pstmt.setString(2,user.getPassword());
-        System.out.println("deleted admin");
+        System.out.println("deleted user " + user.getUsername());
         return pstmt.executeUpdate();
+    }
+
+    public int deleteAdminByStr(Connection con, String username) throws  Exception{
+        String sql = "delete from t_user where username = ?";
+        PreparedStatement pstmt = con.prepareStatement(sql);
+        pstmt.setString(1,username);
+        System.out.println("deleted user(byStr) " + username);
+        return pstmt.executeUpdate();
+
     }
 
     public int adminEditPassword(Connection con, String username, String newPassword) throws Exception{
@@ -54,6 +65,24 @@ public class loginUtil {
         pstmt.setString(2,newPassword);
         System.out.println("passwd edited");
         return pstmt.executeUpdate();
+    }
+
+    public Vector<admin> getUsers(Connection con) throws Exception{
+        Vector<admin> users = new Vector<>();
+
+        String sqlGetUsers = "select * from t_user";
+        PreparedStatement pstmt = con.prepareStatement(sqlGetUsers);
+
+        ResultSet rs = pstmt.executeQuery();
+        while(rs.next()){
+            admin newAdmin = new admin();
+            newAdmin.setUsername(rs.getString("username"));
+            newAdmin.setPassword(rs.getString("password"));
+            users.add(newAdmin);
+        }
+
+        return users;
+
     }
 
 

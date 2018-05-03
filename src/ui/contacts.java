@@ -4,7 +4,6 @@ import classes.admin;
 import classes.member;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.*;
@@ -15,12 +14,13 @@ import java.util.Date;
 import java.util.Vector;
 
 import jdk.nashorn.internal.scripts.JO;
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import utils.revokeStack;
 import utils.csvUtil;
 import utils.contactUtil;
 import utils.dbUtil;
 import utils.memberUtil;
-import utils.loginUtil;
+import utils.adminUtil;
 
 public class contacts {
 
@@ -79,7 +79,7 @@ public class contacts {
     private JLabel contactCountLbl;
     private JPanel westPane;
     private JTree tableTree;
-    private JButton createUserBtn;
+    private JButton userSettingsBtn;
     private JButton editPasswdBtn;
     private JButton deletUserBtn;
     private JLabel usrLbl;
@@ -117,10 +117,11 @@ public class contacts {
 
     private dbUtil dbLink = new dbUtil();
     private memberUtil dbReader = new memberUtil();
-    private loginUtil adminMgr = new loginUtil();
+    private adminUtil adminMgr = new adminUtil();
 
 
     public contacts(admin administrator) {
+
 
         try {
             usrLbl.setText(administrator.getUsername());
@@ -140,6 +141,7 @@ public class contacts {
             DefaultMutableTreeNode root = new DefaultMutableTreeNode("QG工作室");
             root.setAllowsChildren(true);
 
+/*
             DefaultMutableTreeNode groupA = new DefaultMutableTreeNode("数据挖掘");
             DefaultMutableTreeNode groupB = new DefaultMutableTreeNode("嵌入式");
             DefaultMutableTreeNode groupC = new DefaultMutableTreeNode("前端");
@@ -153,8 +155,8 @@ public class contacts {
             root.add(groupE);
             root.add(groupF);
 
-
-            System.out.println(groupA.getParent());
+*/
+            //       System.out.println(groupA.getParent());
 
             DefaultTreeModel tmdl = new DefaultTreeModel(root);
 
@@ -349,7 +351,6 @@ public class contacts {
             });
 
 
-
             deleteBtn.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -441,23 +442,15 @@ public class contacts {
                     memInfo.setDormitory(dormTextField.getText());
                     memInfo.setAddress(addrTextField.getText());
                     */
-                        if (dbReader.memberIDChk(contacts, memInfo)) {
+                        contacts.remove(selectedRowIdx);
+                        contacts.insertElementAt(memInfo, selectedRowIdx);
+                        contactBuilder.tableRefresh(infoModel, contacts);
 
-                            contacts.remove(selectedRowIdx);
-                            contacts.insertElementAt(memInfo, selectedRowIdx);
-                            contactBuilder.tableRefresh(infoModel, contacts);
+                        selectedColumnIdx = recCol;
+                        selectedRowIdx = recRow;
 
-                            selectedColumnIdx = recCol;
-                            selectedRowIdx = recRow;
-
-                            isSaved = false;
-                            frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
-
-                        } else {
-
-                            JOptionPane.showMessageDialog(null, "错误：通讯录成员 ID 重复");
-
-                        }
+                        isSaved = false;
+                        frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
 
 
                     }
@@ -601,34 +594,78 @@ public class contacts {
         }
 
 
-        createUserBtn.addMouseListener(new MouseAdapter() {
+        userSettingsBtn.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                Object[] possibleValues = {"用户名", "密码", "确认密码"}; // 用户的选择项目
 
-                String newUsername = new String();
-                String newPassword = new String();
-                newUsername = (String) JOptionPane.showInputDialog(null, possibleValues[0], "用户名", JOptionPane.QUESTION_MESSAGE);
-                newPassword = (String) JOptionPane.showInputDialog(null, possibleValues[1], "密码", JOptionPane.QUESTION_MESSAGE);
-                System.out.println(newUsername);
-                System.out.println(newPassword);
-                admin newAdmin = new admin();
+                Object[] msgOptions = {"创建用户", "删除用户"};
+                int option = JOptionPane.showOptionDialog(null, "选择操作", "用户设置", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, msgOptions, 0);
+                if (option == 0) {
+                    //create new admin
+                    Object[] msgCreateNewUser = {"用户名", "密码", "确认密码"}; // 用户的选择项
+                    String newUsername = new String();
+                    newUsername = JOptionPane.showInputDialog(null, msgCreateNewUser[0], "用户名", JOptionPane.QUESTION_MESSAGE);
+                    String newPassword = new String();
+                    newPassword = JOptionPane.showInputDialog(null, msgCreateNewUser[1], "密码", JOptionPane.QUESTION_MESSAGE);
+                    String newPasswdAgain = new String();
+                    newPasswdAgain = JOptionPane.showInputDialog(null, msgCreateNewUser[2], "确认密码", JOptionPane.QUESTION_MESSAGE);
+                    admin newAdmin = new admin();
 
-                if (newPassword == null || newUsername == null) {
-                    JOptionPane.showMessageDialog(null, "输入错误");
-                } else {
-                    try {
-                        newAdmin.setUsername(newUsername);
-                        newAdmin.setPassword(newPassword);
-                        adminMgr.createAdmin(dbLink.getConnection(), newAdmin);
+                    if (newPassword.equals("") || newUsername.equals("") || newPasswdAgain.equals("")) {
+                        JOptionPane.showMessageDialog(null, "输入错误");
+                    } else {
+                        if (!newPasswdAgain.equals(newPassword)) {
+                            JOptionPane.showMessageDialog(null, "两次输入密码不一致");
 
-                        JOptionPane.showConfirmDialog(null, "创建成功");
-                    } catch (Exception eeee) {
-                        eeee.printStackTrace();
+                        } else {
+
+                            try {
+                                newAdmin.setUsername(newUsername);
+                                newAdmin.setPassword(newPassword);
+                                adminMgr.createAdmin(dbLink.getConnection(), newAdmin);
+
+                                JOptionPane.showConfirmDialog(null, "创建成功", "", JOptionPane.YES_OPTION);
+                            } catch (Exception eeee) {
+                                JOptionPane.showConfirmDialog(null, "创建失败", "", JOptionPane.YES_OPTION);
+                                eeee.printStackTrace();
+                            }
+                        }
                     }
                 }
+                if (option == 1) {
+                    try {
 
+                        Vector<admin> users = adminMgr.getUsers(dbLink.getConnection());
+
+                        // init username array
+                        Vector<String> usernames = new Vector<>();
+
+                        for (int i = 0; i < users.size(); i++) {
+                            usernames.add(users.get(i).getUsername());
+                        }
+
+                        int userIndex = JOptionPane.showOptionDialog(null, "选择要删除的用户", "选择用户", JOptionPane.YES_OPTION, JOptionPane.QUESTION_MESSAGE, null, usernames.toArray(), 0);
+
+                        String password = JOptionPane.showInputDialog("输入 " + usernames.get(userIndex) + " 的密码");
+
+                        if (password.equals(users.get(userIndex).getPassword())) {
+
+                            adminMgr.deleteAdmin(dbLink.getConnection(), users.get(userIndex));
+                            JOptionPane.showMessageDialog(null, "用户 " + usernames.get(userIndex) + " 已删除", "用户删除", JOptionPane.PLAIN_MESSAGE);
+
+
+                        } else {
+                            JOptionPane.showMessageDialog(null, "用户 " + usernames.get(userIndex) + " 删除失败" + ": 密码错误", "用户删除", JOptionPane.PLAIN_MESSAGE);
+                        }
+
+
+                    } catch (Exception eeeeee) {
+                        System.out.println("ERROR: cannot modify administrators");
+                        eeeeee.printStackTrace();
+                    }
+
+                }
             }
 
 
@@ -644,6 +681,8 @@ public class contacts {
             @Override
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
+
+
                 String newPasswd = new String();
 
                 String oldPasswd = new String();
@@ -651,21 +690,24 @@ public class contacts {
                 oldPasswd = (String) JOptionPane.showInputDialog(null, "输入旧密码", "输入旧密码", JOptionPane.QUESTION_MESSAGE);
 
 
-               /* if (oldPasswd != administrator.getPassword().toString()) {
+                if (!oldPasswd.equals(administrator.getPassword().toString())) {
                     JOptionPane.showMessageDialog(null, "旧密码输入错误，修改错误");
                 } else {
-                 */
-                newPasswd = (String) JOptionPane.showInputDialog(null, "输入新密码", "输入新密码", JOptionPane.QUESTION_MESSAGE);
+                    newPasswd = (String) JOptionPane.showInputDialog(null, "输入新密码", "输入新密码", JOptionPane.QUESTION_MESSAGE);
 
-                try {
+                    try {
 
-                    adminMgr.adminEditPassword(dbLink.getConnection(), administrator.getUsername(), newPasswd);
-                    JOptionPane.showMessageDialog(null, "密码修改成功");
+                        adminMgr.adminEditPassword(dbLink.getConnection(), administrator.getUsername(), newPasswd);
+                        JOptionPane.showMessageDialog(null, "密码修改成功");
 
 
-                } catch (Exception eeeee) {
-                    eeeee.printStackTrace();
+                    } catch (Exception eeeee) {
+                        eeeee.printStackTrace();
+                    }
+
                 }
+
+
             }
 
 
@@ -1034,10 +1076,10 @@ public class contacts {
         gbc.anchor = GridBagConstraints.NORTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;
         userCtrlPane.add(editPasswdBtn, gbc);
-        createUserBtn = new JButton();
-        createUserBtn.setHorizontalTextPosition(0);
-        createUserBtn.setText("创建用戶");
-        createUserBtn.putClientProperty("hideActionText", Boolean.FALSE);
+        userSettingsBtn = new JButton();
+        userSettingsBtn.setHorizontalTextPosition(0);
+        userSettingsBtn.setText("用户设置");
+        userSettingsBtn.putClientProperty("hideActionText", Boolean.FALSE);
         gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 2;
@@ -1046,7 +1088,7 @@ public class contacts {
         gbc.weighty = 1.0;
         gbc.anchor = GridBagConstraints.SOUTH;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        userCtrlPane.add(createUserBtn, gbc);
+        userCtrlPane.add(userSettingsBtn, gbc);
         final JLabel label1 = new JLabel();
         label1.setText("用户名");
         gbc = new GridBagConstraints();
@@ -1055,7 +1097,7 @@ public class contacts {
         gbc.anchor = GridBagConstraints.WEST;
         userCtrlPane.add(label1, gbc);
         usrLbl = new JLabel();
-        usrLbl.setText("Label");
+        usrLbl.setText("");
         gbc = new GridBagConstraints();
         gbc.gridx = 1;
         gbc.gridy = 0;

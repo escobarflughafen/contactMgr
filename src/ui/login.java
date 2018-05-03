@@ -9,9 +9,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.Connection;
 
-import utils.loginUtil;
+import utils.adminUtil;
 import utils.dbUtil;
-import ui.contacts.*;
 
 public class login {
     private JPanel panel1;
@@ -40,7 +39,7 @@ public class login {
         frame.setVisible(true);
         dbUtil dbUtil = new dbUtil();
 
-        loginUtil toLogin = new loginUtil();
+        adminUtil toLogin = new adminUtil();
 
         loginBtn.addMouseMotionListener(new MouseMotionAdapter() {
         });
@@ -59,7 +58,7 @@ public class login {
                     try {
                         con = dbUtil.getConnection();
                         if (toLogin.login(con, user)) {
-                            new contacts(user);
+                            new  contacts(user);
                             frame.dispose();
                         } else {
                             statusLbl.setText("用户名或密码错误");
