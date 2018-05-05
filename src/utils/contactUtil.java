@@ -2,23 +2,13 @@ package utils;
 
 import classes.member;
 import java.sql.Connection;
-import java.sql.ResultSet;
-import java.util.Stack;
 import java.util.Vector;
-import java.sql.*;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.MutableTreeNode;
-import javax.swing.tree.TreeModel;
 
-import com.sun.tools.internal.xjc.reader.xmlschema.bindinfo.BIConversion;
-import utils.revokeStack;
 import java.util.regex.*;
-import utils.memberUtil;
-import utils.dbUtil;
-
 
 
 public class contactUtil {
@@ -149,7 +139,7 @@ public class contactUtil {
 
     }
 
-    public void treeBuild(Vector <member> members, String[] groups, DefaultMutableTreeNode root){
+    public void buildTree(Vector <member> members, String[] groups, DefaultMutableTreeNode root){
         for(int i = 0; i < members.size(); i++){
             if(members.get(i).getGroup() == groups[0]){
                 ((DefaultMutableTreeNode)root.getChildAt(0)).add(new DefaultMutableTreeNode(members.get(i).getName()));
@@ -207,6 +197,16 @@ public class contactUtil {
     }
 
 
+    public boolean IDCheck(Vector<member> contacts, member newMember){
+
+        for(int i = 0; i < contacts.size(); i++){
+            if (newMember.getId().equals(contacts.get(i).getId())){
+                return false;
+            }
+        }
+
+        return true;
+    }
 
 
 

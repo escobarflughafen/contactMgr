@@ -13,20 +13,19 @@ import java.sql.Connection;
 import java.util.Date;
 import java.util.Vector;
 
-import jdk.nashorn.internal.scripts.JO;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
+
 import utils.revokeStack;
 import utils.csvUtil;
 import utils.contactUtil;
 import utils.dbUtil;
-import utils.memberUtil;
-import utils.adminUtil;
+import Dao.memberDao;
+import Dao.adminDao;
 
 public class contacts {
 
     private JPanel panel1;
     private JTextField searchTextField;
-    private JButton btnGo;
     private JPanel modifyPane;
     private JTabbedPane modifyTabbedPane;
     private JButton saveBtn;
@@ -40,7 +39,6 @@ public class contacts {
     private JPanel contactTable;
     private JPanel detailPanel;
     private JPanel checkPanel;
-    private JSpinner clsSpin;
     private JComboBox groupBox;
     private JButton deleteBtn;
     private JButton ex2csvBtn;
@@ -67,7 +65,7 @@ public class contacts {
     private JPanel btnPane;
     private JPanel userPane;
     private JPanel userCtrlPane;
-    private JTable infoTable;
+
     private JLabel editStatusLbl;
     private JPanel catalogContainer;
     private JList searchResultList;
@@ -83,41 +81,35 @@ public class contacts {
     private JButton editPasswdBtn;
     private JButton deletUserBtn;
     private JLabel usrLbl;
-    private JLabel dbStatus;
 
     //constants
     private int columnCount = 9;
 
 
     //status variables;
-    public int selectedRowIdx = -1; //selected row index in catalogue
-    public int selectedColumnIdx = -1;
-    public boolean isSaved = true;    //records whether the data is modified after saving or not
-    private int rowCount = 0;
+    private int selectedRowIdx = -1; //selected row index in catalogue
+    private int selectedColumnIdx = -1;
+    private boolean isSaved = true;    //records whether the data is modified after saving or not
+
     private String username;
     private Vector<member> contacts;
     private Vector<String> searchResult = new Vector<>();
     private Vector<Integer> searchResultIndex = new Vector<>();
     private int saveCount = 0;
 
-    public int CONTACTS_SAVE = 0;
-    public int CONTACTS_CANCEL = 1;
-    public int CONTACTS_DISPOSE = 2;
-
 
     //revoking stack
-    public revokeStack deletStack = new revokeStack();
-    public contactUtil contactBuilder = new contactUtil();
+    private revokeStack deletStack = new revokeStack();
+    private contactUtil contactBuilder = new contactUtil();
 
 
-    String colHeaders[] = {"ID", "姓名", "方向", "年级", "班级", "电话", "电邮", "宿舍", "住址"};
-    String groups[] = {"数据挖掘", "嵌入式", "前端", "后端", "手游", "设计"}; //need readFROM DATABASE
+    private String colHeaders[] = {"ID", "姓名", "方向", "年级", "班级", "电话", "电邮", "宿舍", "住址"};
 
-    DefaultTableModel infoModel = new DefaultTableModel(colHeaders, 0);
+    private DefaultTableModel infoModel = new DefaultTableModel(colHeaders, 0);
 
     private dbUtil dbLink = new dbUtil();
-    private memberUtil dbReader = new memberUtil();
-    private adminUtil adminMgr = new adminUtil();
+    private memberDao dbReader = new memberDao();
+    private adminDao adminMgr = new adminDao();
 
 
     public contacts(admin administrator) {
@@ -175,6 +167,11 @@ public class contacts {
                 public void windowClosing(WindowEvent e) {
 
                     if (isSaved) {
+                        try {
+                            dbLink.closeConnection(dbLink.getConnection());
+                        } catch (Exception eeeeeeeee) {
+                            eeeeeeeee.printStackTrace();
+                        }
                         System.exit(1);
                     } else {
                         Object[] options = {"保存", "不保存", "取消"};
@@ -185,6 +182,7 @@ public class contacts {
                             try {
                                 dbReader.saveDB(contacts, dbLink.getConnection());
                                 isSaved = true;
+                                dbLink.closeConnection(dbLink.getConnection());
                                 System.exit(1);
                             } catch (Exception eee) {
                                 eee.printStackTrace();
@@ -286,7 +284,6 @@ public class contacts {
 
                     if (selectedRowIdx >= 0) {
                         String row[] = new String[columnCount];
-                        Integer classInt = new Integer(5);
 
                         for (int i = 0; i < columnCount; i++) {
                             row[i] = (catalogue.getValueAt(selectedRowIdx, i) == null) ? "" : (catalogue.getValueAt(selectedRowIdx, i).toString());
@@ -338,9 +335,9 @@ public class contacts {
                                 gradeBox.setSelectedIndex(0);
                                 break;
                         }
-                        ;
 
-                        clasBox.setSelectedIndex((row[4] == "") ? 0 : (Integer.parseInt(row[4]) - 1));
+
+                        clasBox.setSelectedIndex((row[4].equals("")) ? 0 : (Integer.parseInt(row[4]) - 1));
                         teleNumTextField.setText(row[5]);
                         emailTextField.setText(row[6]);
                         dormTextField.setText(row[7]);
@@ -442,17 +439,21 @@ public class contacts {
                     memInfo.setDormitory(dormTextField.getText());
                     memInfo.setAddress(addrTextField.getText());
                     */
-                        contacts.remove(selectedRowIdx);
-                        contacts.insertElementAt(memInfo, selectedRowIdx);
-                        contactBuilder.tableRefresh(infoModel, contacts);
+                        if (!contactBuilder.IDCheck(contacts, memInfo)) {
+                            JOptionPane.showConfirmDialog(null, "错误: ID 重复", "保存通讯录信息", JOptionPane.PLAIN_MESSAGE);
 
-                        selectedColumnIdx = recCol;
-                        selectedRowIdx = recRow;
+                        } else {
+                            contacts.remove(selectedRowIdx);
+                            contacts.insertElementAt(memInfo, selectedRowIdx);
+                            contactBuilder.tableRefresh(infoModel, contacts);
 
-                        isSaved = false;
-                        frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
+                            selectedColumnIdx = recCol;
+                            selectedRowIdx = recRow;
 
+                            isSaved = false;
+                            frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
 
+                        }
                     }
                 }
             });
@@ -476,11 +477,23 @@ public class contacts {
             ex2csvBtn.addMouseListener(new MouseAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    Date dt = new Date();
-                    super.mousePressed(e);
-                    csvUtil csvMaker = new csvUtil(dt.toString() + ".csv", catalogue);
-                    csvMaker.tabletoCSV();
 
+                    super.mousePressed(e);
+                    String filename = JOptionPane.showInputDialog(null, "请输入保存的文件名: ", "输出 csv", JOptionPane.PLAIN_MESSAGE);
+                    if (filename == null || filename.equals("")) {
+                        Date dt = new Date();
+                        filename = dt.toString() + ".csv";
+                        csvUtil csvMaker = new csvUtil(filename);
+                        csvMaker.setTableToRecord(catalogue);
+                        csvMaker.tableToCSV();
+
+                    } else {
+                        filename += ".csv";
+                        csvUtil csvMaker = new csvUtil(filename);
+                        csvMaker.setTableToRecord(catalogue);
+                        csvMaker.tableToCSV();
+                    }
+                    JOptionPane.showConfirmDialog(null, "已输出至 csv/" + filename, "输出 csv", JOptionPane.PLAIN_MESSAGE);
                 }
             });
 
@@ -557,7 +570,10 @@ public class contacts {
 
                         }
                         frame.setTitle((isSaved) ? "通讯录" : "通讯录 [未保存]");
+                        JOptionPane.showConfirmDialog(null, "通讯录已保存", "通讯录保存", JOptionPane.PLAIN_MESSAGE);
                     } catch (Exception ee) {
+
+                        JOptionPane.showConfirmDialog(null, "通讯录保存失败，请检查表列", "通讯录保存", JOptionPane.PLAIN_MESSAGE);
                         ee.printStackTrace();
                     }
                 }
@@ -623,17 +639,15 @@ public class contacts {
                             }
                         }
                         if (!isExist) {
-                            String newPassword = new String();
-                            newPassword = JOptionPane.showInputDialog(null, msgCreateNewUser[1], "创建用戶", JOptionPane.QUESTION_MESSAGE);
-                            String newPasswdAgain = new String();
-                            newPasswdAgain = JOptionPane.showInputDialog(null, msgCreateNewUser[2], "创建用戶", JOptionPane.QUESTION_MESSAGE);
+                            String newPassword = JOptionPane.showInputDialog(null, msgCreateNewUser[1], "创建用戶", JOptionPane.PLAIN_MESSAGE);
+                            String newPasswdAgain = JOptionPane.showInputDialog(null, msgCreateNewUser[2], "创建用戶", JOptionPane.PLAIN_MESSAGE);
                             admin newAdmin = new admin();
 
                             if (newPassword.equals("") || newUsername.equals("") || newPasswdAgain.equals("")) {
-                                JOptionPane.showMessageDialog(null, "输入错误", "创建用戶", JOptionPane.PLAIN_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "创建用戶失败: 输入错误", "创建用戶", JOptionPane.PLAIN_MESSAGE);
                             } else {
                                 if (!newPasswdAgain.equals(newPassword)) {
-                                    JOptionPane.showMessageDialog(null, "两次输入密码不一致", "创建用戶", JOptionPane.PLAIN_MESSAGE);
+                                    JOptionPane.showMessageDialog(null, "创建用戶失败: 两次输入密码不一致", "创建用戶", JOptionPane.PLAIN_MESSAGE);
 
                                 } else {
 
@@ -642,9 +656,9 @@ public class contacts {
                                         newAdmin.setPassword(newPassword);
                                         adminMgr.createAdmin(dbLink.getConnection(), newAdmin);
 
-                                        JOptionPane.showConfirmDialog(null, "创建成功", "创建用戶", JOptionPane.PLAIN_MESSAGE);
+                                        JOptionPane.showConfirmDialog(null, "用戶 " + newUsername + " 创建成功", "创建用戶", JOptionPane.PLAIN_MESSAGE);
                                     } catch (Exception eeee) {
-                                        JOptionPane.showConfirmDialog(null, "创建失败", "创建用戶", JOptionPane.PLAIN_MESSAGE);
+                                        JOptionPane.showConfirmDialog(null, "用戶 " + newUsername + " 创建失败", "创建用戶", JOptionPane.PLAIN_MESSAGE);
                                         eeee.printStackTrace();
                                     }
                                 }
@@ -666,14 +680,15 @@ public class contacts {
 
                             String password = JOptionPane.showInputDialog("输入 " + usernames.get(userIndex) + " 的密码");
 
-                            if (password.equals(users.get(userIndex).getPassword())) {
+                            if (!password.equals(users.get(userIndex).getPassword()) || password == null) {
 
-                                adminMgr.deleteAdmin(dbLink.getConnection(), users.get(userIndex));
-                                JOptionPane.showMessageDialog(null, "用戶 " + usernames.get(userIndex) + " 已删除", "删除用戶", JOptionPane.PLAIN_MESSAGE);
+                                JOptionPane.showMessageDialog(null, "用戶 " + usernames.get(userIndex) + " 删除失败" + ": 密码错误", "删除用戶", JOptionPane.PLAIN_MESSAGE);
 
 
                             } else {
-                                JOptionPane.showMessageDialog(null, "用戶 " + usernames.get(userIndex) + " 删除失败" + ": 密码错误", "删除用戶", JOptionPane.PLAIN_MESSAGE);
+                                adminMgr.deleteAdmin(dbLink.getConnection(), users.get(userIndex));
+                                JOptionPane.showMessageDialog(null, "用戶 " + usernames.get(userIndex) + " 已删除", "删除用戶", JOptionPane.PLAIN_MESSAGE);
+
                             }
 
 
@@ -707,24 +722,29 @@ public class contacts {
 
                 String newPasswd = new String();
 
-                String oldPasswd = new String();
-
-                oldPasswd = (String) JOptionPane.showInputDialog(null, "输入旧密码", "修改密码", JOptionPane.QUESTION_MESSAGE);
+                String oldPasswd = JOptionPane.showInputDialog(null, "输入旧密码", "修改密码", JOptionPane.PLAIN_MESSAGE);
 
 
-                if (!oldPasswd.equals(administrator.getPassword().toString())) {
+                if (!oldPasswd.equals(administrator.getPassword()) || oldPasswd == null) {
                     JOptionPane.showMessageDialog(null, "旧密码输入错误，修改失败", "修改密码", JOptionPane.PLAIN_MESSAGE);
                 } else {
-                    newPasswd = (String) JOptionPane.showInputDialog(null, "输入新密码", "输入新密码", JOptionPane.QUESTION_MESSAGE);
+                    newPasswd = JOptionPane.showInputDialog(null, "输入新密码", "输入新密码", JOptionPane.PLAIN_MESSAGE);
+                    if (newPasswd == null) {
+                        JOptionPane.showMessageDialog(null, "新密码输入错误，修改失败", "修改密码", JOptionPane.PLAIN_MESSAGE);
 
-                    try {
-
-                        adminMgr.adminEditPassword(dbLink.getConnection(), administrator.getUsername(), newPasswd);
-                        JOptionPane.showMessageDialog(null, "密码修改成功", "修改密码", JOptionPane.PLAIN_MESSAGE);
+                    } else {
 
 
-                    } catch (Exception eeeee) {
-                        eeeee.printStackTrace();
+                        try {
+
+                            adminMgr.adminEditPassword(dbLink.getConnection(), administrator.getUsername(), oldPasswd, newPasswd);
+                            administrator.setPassword(newPasswd);
+                            JOptionPane.showMessageDialog(null, "密码修改成功", "修改密码", JOptionPane.PLAIN_MESSAGE);
+
+
+                        } catch (Exception eeeee) {
+                            eeeee.printStackTrace();
+                        }
                     }
 
                 }

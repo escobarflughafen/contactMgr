@@ -1,20 +1,14 @@
 package utils;
 
-import com.sun.imageio.spi.OutputStreamImageOutputStreamSpi;
+import classes.member;
 
 import javax.swing.*;
 import java.io.*;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-import java.io.File;
-import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.util.Vector;
 
 public class csvUtil {
     //private String[] rowData = new String[100];  //unused
@@ -25,7 +19,7 @@ public class csvUtil {
     private JTable tableToRecord;
     private File csvFile;
 
-    public csvUtil(String fileName,JTable table){
+    public csvUtil(String fileName){
         //localSaveAddress = address;
         File dir = new File("csv");
         if(!dir.exists()) {
@@ -33,7 +27,10 @@ public class csvUtil {
         }
         csvFile = new File("./csv/"+fileName);
         csvFileName = fileName;
-        tableToRecord = table;
+    }
+
+    public void setTableToRecord(JTable tableToRecord){
+        this.tableToRecord = tableToRecord;
     }
 
 
@@ -47,7 +44,7 @@ public class csvUtil {
         return rowString;
     }
 
-    public void tabletoCSV(){
+    public void tableToCSV(){
         try {
             File csv = new File("./csv/"+csvFileName);
             csv.createNewFile();
@@ -73,6 +70,8 @@ public class csvUtil {
         }
 
     }
+
+
 
     public void CSVtoTable(){
         try{

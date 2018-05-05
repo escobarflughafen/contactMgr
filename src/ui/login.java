@@ -9,7 +9,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.sql.Connection;
 
-import utils.adminUtil;
+import Dao.adminDao;
 import utils.dbUtil;
 
 public class login {
@@ -39,7 +39,7 @@ public class login {
         frame.setVisible(true);
         dbUtil dbUtil = new dbUtil();
 
-        adminUtil toLogin = new adminUtil();
+        adminDao toLogin = new adminDao();
 
         loginBtn.addMouseMotionListener(new MouseMotionAdapter() {
         });
@@ -58,7 +58,8 @@ public class login {
                     try {
                         con = dbUtil.getConnection();
                         if (toLogin.login(con, user)) {
-                            new  contacts(user);
+                            new contacts(user);
+                            con.close();
                             frame.dispose();
                         } else {
                             statusLbl.setText("用户名或密码错误");

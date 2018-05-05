@@ -1,4 +1,4 @@
-package utils;
+package Dao;
 
 import classes.admin;
 
@@ -6,9 +6,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
-import java.util.concurrent.ExecutionException;
 
-public class adminUtil {
+public class adminDao {
 
     public boolean login(Connection conn, admin user) throws Exception{
         admin loginAdmin = null;
@@ -29,7 +28,7 @@ public class adminUtil {
     }
 
     public int createAdmin(Connection con, admin newAdmin) throws Exception{
-        String sql = "insert into t_user values (?,?)";
+        String sql = "insert into t_user values (?, ?)";
         PreparedStatement pstmt = con.prepareStatement(sql);
         pstmt.setString(1,newAdmin.getUsername());
         pstmt.setString(2,newAdmin.getPassword());
@@ -57,12 +56,13 @@ public class adminUtil {
 
     }
 
-    public int adminEditPassword(Connection con, String username, String newPassword) throws Exception{
+    public int adminEditPassword(Connection con, String username, String oldPassword,String newPassword) throws Exception{
 
-        String sql = "update t_user set username = ? where password = ?";
+        String sql = "update t_user set password = ? where (username, password) = (?, ?)";
         PreparedStatement pstmt = con.prepareStatement(sql);
-        pstmt.setString(1,username);
-        pstmt.setString(2,newPassword);
+        pstmt.setString(1,newPassword);
+        pstmt.setString(2,username);
+        pstmt.setString(3,oldPassword);
         System.out.println("passwd edited");
         return pstmt.executeUpdate();
     }

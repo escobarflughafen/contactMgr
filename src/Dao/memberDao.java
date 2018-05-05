@@ -1,6 +1,6 @@
 //enroll members from database
 
-package utils;
+package Dao;
 
 import classes.admin;
 import classes.member;
@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Vector;
 
-public class memberUtil {
+public class memberDao {
 
     public boolean memberIDChk(Vector<member> contacts, member newMember){
         for(int i = 0; i < contacts.size(); i++){
